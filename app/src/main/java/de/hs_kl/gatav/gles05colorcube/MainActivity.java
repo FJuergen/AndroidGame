@@ -1,9 +1,15 @@
 package de.hs_kl.gatav.gles05colorcube;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ConfigurationInfo;
+import android.content.res.AssetManager;
+import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -12,14 +18,20 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.opengles.GL10;
 
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
+
+import static android.opengl.GLES10.glGetString;
+import static javax.microedition.khronos.opengles.GL10.GL_FALSE;
+import static javax.microedition.khronos.opengles.GL10.GL_VERSION;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private GLSurfaceView touchableGLSurfaceView;
+    public static AssetManager assetManager;
 
     private final int MENU_RESET = 1, MENU_PAN = 2, MENU_ZOOM = 3;
     private final int GROUP_DEFAULT = 0, GROUP_PAN = 1, GROUP_ZOOM = 2;
@@ -28,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        android.os.Debug.waitForDebugger();
+        MainActivity.assetManager = getAssets();
         touchableGLSurfaceView = new TouchableGLSurfaceView(this);
         setContentView(touchableGLSurfaceView);
         touchableGLSurfaceView.setFocusableInTouchMode(true);
@@ -54,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onPrepareOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -95,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
 // an implementation of a virtual trackball rotation control
 class TouchableGLSurfaceView extends GLSurfaceView {
     private OurRenderer ourRenderer;
-    private StaticShader shader = new StaticShader();
+    private StaticShader shader;
+    Loader loader;
 
     static public boolean guiZoom = true;
     // possible touch states
@@ -104,6 +119,7 @@ class TouchableGLSurfaceView extends GLSurfaceView {
     final static int ZOOM = 2;
     final static int PAN = 3;
     int touchState = NONE;
+    RawModel model;
 
     final static float MIN_DIST = 50;
     static int oldDistance = 0;
@@ -120,6 +136,15 @@ class TouchableGLSurfaceView extends GLSurfaceView {
     static int WINDOW_W = 600;
     static int WINDOW_H = 800;
 
+    float[] vertices = {
+            -0.25f, 0.25f, 0f,
+            -0.25f, -0.25f, 0f,
+            0.25f, -0.25f, 0f,
+            0.25f, -0.25f, 0f,
+            0.25f, 0.25f, 0f,
+            -0.25f, 0.25f, 0f
+    };
+
     static float zNear = 1.0f, zFar = 1000.0f;
 
     static {
@@ -130,6 +155,9 @@ class TouchableGLSurfaceView extends GLSurfaceView {
 
     public TouchableGLSurfaceView(Context context) {
         super(context);
+        setEGLContextClientVersion(3);
+
+
         ourRenderer = new OurRenderer();
         setRenderer(ourRenderer);
 
@@ -238,19 +266,30 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         centerY = (int) ((event.getY(0) + event.getY(1)) / 2);
     }
 
+
     // the implementation of the renderer interface
     private class OurRenderer implements GLSurfaceView.Renderer {
 
         private ColorCube colorCube;
 
+        private static final String TAG = "MyGLRenderer";
+
+        private final float[] mMVPMatrix = new float[16];
+        private final float[] mProjMatrix = new float[16];
+        private final float[] mVMatrix = new float[16];
+        private final float[] mRotationMatrix = new float[16];
+
+        // Declare as volatile because we are updating it from another thread
+        public volatile float mAngle;
         public OurRenderer() {
             colorCube = new ColorCube();
         }
 
         public void onDrawFrame(GL10 gl) {
+            /*
             shader.start();
             // the first thing to do: clear screen and depth buffer
-            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+            GLES20.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
             // reset modelview matrix
             gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -260,37 +299,58 @@ class TouchableGLSurfaceView extends GLSurfaceView {
             gl.glTranslatef(-PAN_X, -PAN_Y, -EYE_DISTANCE);
             Trackball.build_rotmatrix(TRANSFORM_MATRIX, CURRENT_QUATERNION);
             gl.glMultMatrixf(TRANSFORM_MATRIX, 0);
+            shader.stop();
 
-            colorCube.draw(gl);
+             */
+            shader.start();
+            prepare();
+            render(model);
             shader.stop();
         }
 
         // resize of viewport
         // set projection matrix
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-            gl.glViewport(0, 0, width, height);
-
+/*
             float aspectRatio = (float) width / height;
             gl.glMatrixMode(GL10.GL_PROJECTION);
             gl.glLoadIdentity();
             GLU.gluPerspective(gl, 45.0f, aspectRatio, zNear, zFar);
             GLU.gluLookAt(gl, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
             gl.glMatrixMode(GL10.GL_MODELVIEW);
+
+ */
         }
 
         // creation of viewport
         // initialization of some opengl features
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+            loader = new Loader();
+            model = loader.loadToVAO(vertices);
 
-            gl.glDisable(GL10.GL_DITHER);
-            gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
-            gl.glClearColor(0, 0, 0, 1);
-            gl.glEnable(GL10.GL_CULL_FACE);
+            shader = new StaticShader();
+            GLES30.glDisable(GL10.GL_DITHER);
+            GLES30.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
+            GLES30.glClearColor(0, 0, 0, 1);
+            GLES30.glEnable(GL10.GL_CULL_FACE);
             //gl.glShadeModel(GL10.GL_FLAT);
-            gl.glShadeModel(GL10.GL_SMOOTH);
-            gl.glEnable(GL10.GL_DEPTH_TEST);
+            //GLES30.glShadeModel(GL10.GL_SMOOTH);
+            GLES30.glEnable(GL10.GL_DEPTH_TEST);
 
             resetViewing();
+        }
+
+        public void prepare(){
+            GLES30.glClearColor(1, 1,1,0);
+            GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
+        }
+
+        public void render(RawModel model){
+            GLES30.glBindVertexArray(model.getVaoID());
+            GLES30.glEnableVertexAttribArray(0);
+            GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, model.getVertexCount());
+            GLES30.glDisableVertexAttribArray(0);
+            GLES30.glBindVertexArray(0);
         }
     }
 

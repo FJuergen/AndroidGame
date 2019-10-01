@@ -1,5 +1,8 @@
 package de.hs_kl.gatav.gles05colorcube;
 
+import android.opengl.GLES20;
+import android.opengl.Matrix;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -23,6 +26,10 @@ public class ColorCube {
     private ShortBuffer backTopologyBuffer;
     private ShortBuffer topologyBuffer;
 
+
+    private int mPositionHandle;
+    private int mColorHandle;
+    private int mMVPMatrixHandle;
 
     public ColorCube() {
 
@@ -80,17 +87,24 @@ public class ColorCube {
 
     }
 
-    public void draw(GL10 gl) {
+    public void draw(float[] mvpMatrix) {
+//TRANSLATION
+        float[] transMatrix = new float[16];
 
-        // draw cube
-        gl.glColor4f(1.0f, 0.0f, 0.0f, 0.0f);
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-        gl.glColorPointer(4, GL10.GL_FLOAT, 0, topColorBuffer);
-        gl.glDrawElements(MODE, topologyBuffer.limit(), GL10.GL_UNSIGNED_SHORT, topologyBuffer);
-        gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+        Matrix.setIdentityM(transMatrix,0);
+        Matrix.translateM(transMatrix,0,5.0f,0,0);
+        Matrix.multiplyMM(transMatrix,0,mvpMatrix,0,transMatrix,0);
 
+
+
+        // Apply the projection and view transformation
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, transMatrix, 0);
+
+        // Draw the square
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, 3,
+                GLES20.GL_UNSIGNED_SHORT, topologyBuffer);
+
+        // Disable vertex array
+        GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
 }
