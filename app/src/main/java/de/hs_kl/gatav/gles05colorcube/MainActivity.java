@@ -137,12 +137,12 @@ class TouchableGLSurfaceView extends GLSurfaceView {
     static int WINDOW_H = 800;
 
     float[] vertices = {
-            -0.25f, 0.25f, 0f,
-            -0.25f, -0.25f, 0f,
-            0.25f, -0.25f, 0f,
-            0.25f, -0.25f, 0f,
-            0.25f, 0.25f, 0f,
-            -0.25f, 0.25f, 0f
+            -0.5f, 0.25f, 0f,
+            -0.5f, -0.25f, 0f,
+            0.5f, -0.25f, 0f,
+            0.5f, -0.25f, 0f,
+            0.5f, 0.25f, 0f,
+            -0.5f, 0.25f, 0f
     };
 
     static float zNear = 1.0f, zFar = 1000.0f;
@@ -286,22 +286,6 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         }
 
         public void onDrawFrame(GL10 gl) {
-            /*
-            shader.start();
-            // the first thing to do: clear screen and depth buffer
-            GLES20.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-
-            // reset modelview matrix
-            gl.glMatrixMode(GL10.GL_MODELVIEW);
-            gl.glLoadIdentity();
-
-            // manipulate modelview matrix by setting viewing transformation
-            gl.glTranslatef(-PAN_X, -PAN_Y, -EYE_DISTANCE);
-            Trackball.build_rotmatrix(TRANSFORM_MATRIX, CURRENT_QUATERNION);
-            gl.glMultMatrixf(TRANSFORM_MATRIX, 0);
-            shader.stop();
-
-             */
             shader.start();
             prepare();
             render(model);
@@ -311,15 +295,7 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         // resize of viewport
         // set projection matrix
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-/*
-            float aspectRatio = (float) width / height;
-            gl.glMatrixMode(GL10.GL_PROJECTION);
-            gl.glLoadIdentity();
-            GLU.gluPerspective(gl, 45.0f, aspectRatio, zNear, zFar);
-            GLU.gluLookAt(gl, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-            gl.glMatrixMode(GL10.GL_MODELVIEW);
-
- */
+            GLES20.glViewport(0, 0, width, height);
         }
 
         // creation of viewport
@@ -329,15 +305,6 @@ class TouchableGLSurfaceView extends GLSurfaceView {
             model = loader.loadToVAO(vertices);
 
             shader = new StaticShader();
-            GLES30.glDisable(GL10.GL_DITHER);
-            GLES30.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
-            GLES30.glClearColor(0, 0, 0, 1);
-            GLES30.glEnable(GL10.GL_CULL_FACE);
-            //gl.glShadeModel(GL10.GL_FLAT);
-            //GLES30.glShadeModel(GL10.GL_SMOOTH);
-            GLES30.glEnable(GL10.GL_DEPTH_TEST);
-
-            resetViewing();
         }
 
         public void prepare(){
