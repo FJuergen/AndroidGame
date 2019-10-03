@@ -1,4 +1,4 @@
-package de.hs_kl.gatav.gles05colorcube;
+package de.hs_kl.gatav.gles05colorcube.models;
 
 public class RawModel {
     private int vaoID;
