@@ -1,47 +1,24 @@
 package de.hs_kl.gatav.gles05colorcube;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLES30;
-import android.opengl.GLUtils;
+import android.opengl.GLSurfaceView;
 
-import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hs_kl.gatav.gles05colorcube.models.RawModel;
-
 public class Loader  {
     private List<Integer> vaos = new ArrayList<Integer>();
     private List<Integer> vbos = new ArrayList<Integer>();
-    private List<Integer> textures = new ArrayList<>();
 
-    public RawModel loadToVAO(float[] positions, int[] indices, float[] textureCoords){
+    public RawModel loadToVAO(float[] positions){
         int vaoID = createVAO();
-        bindIndicesToBuffer(indices);
-        storeDataInAttributeList(0,3 ,positions);
-        storeDataInAttributeList(1,2 ,textureCoords);
+        storeDataInAttributeList(0,positions);
         unbindVAO();
-        return new RawModel(vaoID,indices.length);
-    }
-
-    private void bindIndicesToBuffer(int[] indices){
-        int[] vboID = new int[1];
-        GLES30.glGenBuffers(1,vboID,0);
-        vbos.add(vboID[0]);
-        GLES30.glBindBuffer(GLES30.GL_ELEMENT_ARRAY_BUFFER,vboID[0]);
-        IntBuffer buffer = storeDataInIntBuffer(indices);
-        GLES30.glBufferData(GLES30.GL_ELEMENT_ARRAY_BUFFER,indices.length*4, buffer, GLES30.GL_STATIC_DRAW);
-
-    }
-
-    private IntBuffer storeDataInIntBuffer(int[] data){
-        IntBuffer buffer = IntBuffer.allocate(data.length);
-        buffer.put(data);
-        buffer.flip();
-        return buffer;
+        return new RawModel(vaoID,positions.length/3);
     }
 
     private int createVAO(){
@@ -65,48 +42,18 @@ public class Loader  {
             buffer.flip();
             GLES30.glDeleteBuffers(1, buffer);
         }
-        for(int texture:textures){
-            IntBuffer buffer = IntBuffer.allocate(1);
-            buffer.put(texture);
-            buffer.flip();
-            GLES30.glDeleteTextures(1, buffer);
-        }
 
     }
 
-    public int loadTexture(String fileName){
-
-        final int[] textureID = new int[1];
-        GLES30.glGenTextures(1,textureID,0);
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-
-        try {
-            final Bitmap bitmap = BitmapFactory.decodeStream(MainActivity.assetManager.open("textures/" + fileName),null,options);
-            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D,textureID[0]);
-
-            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
-            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
-
-            GLUtils.texImage2D(GLES30.GL_TEXTURE_2D,0,bitmap,0);
-            bitmap.recycle();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        textures.add(textureID[0]);
-        return textureID[0];
-    }
-
-    private void storeDataInAttributeList(int attributeNumber,int dataSize, float[] data){
+    private void storeDataInAttributeList(int attributeNumber, float[] data){
         int[] vboID = new int[1];
+        vbos.add(vboID[0]);
         GLES30.glGenBuffers(1, vboID, 0);
         GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vboID[0]);
-        vbos.add(vboID[0]);
         System.out.println(vboID[0]);
-        FloatBuffer buffer = storeDataInFloatBuffer(data);
+        FloatBuffer buffer = storeDataInFLoatBuffer(data);
         GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER,data.length * 4, buffer, GLES30.GL_STATIC_DRAW);
-        GLES30.glVertexAttribPointer(attributeNumber, dataSize, GLES30.GL_FLOAT, false, 0, 0);
+        GLES30.glVertexAttribPointer(attributeNumber, 3, GLES30.GL_FLOAT, false, 0, 0);
         GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
     }
 
@@ -114,7 +61,7 @@ public class Loader  {
         GLES30.glBindVertexArray(0);
     }
 
-    private FloatBuffer storeDataInFloatBuffer(float[] data){
+    private FloatBuffer storeDataInFLoatBuffer(float[] data){
         FloatBuffer buffer = FloatBuffer.allocate(data.length);
         buffer.put(data);
         buffer.flip();

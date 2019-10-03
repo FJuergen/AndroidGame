@@ -85,12 +85,6 @@ public abstract class ShaderProgram {
         int[] success = new int[1];
         GLES20.glGetShaderiv(shaderID,GLES20.GL_COMPILE_STATUS,success, 0);
         if(success[0]== GL11.GL_FALSE){
-            if(type==GLES30.GL_FRAGMENT_SHADER){
-                System.out.println("Fragment");
-            }
-            else{
-                System.out.println("Vertex");
-            }
             System.err.println(GLES20.glGetShaderInfoLog(shaderID));
             System.err.println("Could not compile shader!");
             System.exit(-1);

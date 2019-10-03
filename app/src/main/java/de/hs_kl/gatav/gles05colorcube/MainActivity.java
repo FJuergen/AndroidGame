@@ -1,10 +1,15 @@
 package de.hs_kl.gatav.gles05colorcube;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLU;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -13,12 +18,14 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.opengles.GL10;
 
-import de.hs_kl.gatav.gles05colorcube.models.RawModel;
-import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
-import de.hs_kl.gatav.gles05colorcube.textures.ModelTexture;
+
+import static android.opengl.GLES10.glGetString;
+import static javax.microedition.khronos.opengles.GL10.GL_FALSE;
+import static javax.microedition.khronos.opengles.GL10.GL_VERSION;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -112,6 +119,7 @@ class TouchableGLSurfaceView extends GLSurfaceView {
     final static int ZOOM = 2;
     final static int PAN = 3;
     int touchState = NONE;
+    RawModel model;
 
     final static float MIN_DIST = 50;
     static int oldDistance = 0;
@@ -127,6 +135,15 @@ class TouchableGLSurfaceView extends GLSurfaceView {
 
     static int WINDOW_W = 600;
     static int WINDOW_H = 800;
+
+    float[] vertices = {
+            -0.5f, 0.25f, 0f,
+            -0.5f, -0.25f, 0f,
+            0.5f, -0.25f, 0f,
+            0.5f, -0.25f, 0f,
+            0.5f, 0.25f, 0f,
+            -0.5f, 0.25f, 0f
+    };
 
     static float zNear = 1.0f, zFar = 1000.0f;
 
@@ -262,31 +279,6 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         private final float[] mVMatrix = new float[16];
         private final float[] mRotationMatrix = new float[16];
 
-        RawModel model;
-
-
-        float[] vertices = {
-                -0.5f, 0.25f, 0f,
-                -0.5f, -0.25f, 0f,
-                0.5f, -0.25f, 0f,
-                0.5f, 0.25f, 0f,
-        };
-
-        int[] indices = {
-                0,1,3,
-                3,1,2
-        };
-
-        float[] textureCoords = {
-                0,0,
-                0,1,
-                1,1,
-                1,0
-        };
-
-        ModelTexture texture;
-        TexturedModel texturedModel;
-
         // Declare as volatile because we are updating it from another thread
         public volatile float mAngle;
         public OurRenderer() {
@@ -296,7 +288,7 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         public void onDrawFrame(GL10 gl) {
             shader.start();
             prepare();
-            render(texturedModel);
+            render(model);
             shader.stop();
         }
 
@@ -310,9 +302,8 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         // initialization of some opengl features
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             loader = new Loader();
-            model = loader.loadToVAO(vertices,indices,textureCoords);
-            texture = new ModelTexture(loader.loadTexture("test.png"));
-            texturedModel = new TexturedModel(model,texture);
+            model = loader.loadToVAO(vertices);
+
             shader = new StaticShader();
         }
 
@@ -321,16 +312,11 @@ class TouchableGLSurfaceView extends GLSurfaceView {
             GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
         }
 
-        public void render(TexturedModel model){
-            RawModel rawModel = model.getModel();
-            GLES30.glBindVertexArray(rawModel.getVaoID());
+        public void render(RawModel model){
+            GLES30.glBindVertexArray(model.getVaoID());
             GLES30.glEnableVertexAttribArray(0);
-            GLES30.glEnableVertexAttribArray(1);
-            GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D,texturedModel.getTexture().getTextureID());
-            GLES30.glDrawElements(GLES30.GL_TRIANGLES,  rawModel.getVertexCount(),GLES30.GL_UNSIGNED_INT,0);
+            GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, model.getVertexCount());
             GLES30.glDisableVertexAttribArray(0);
-            GLES30.glDisableVertexAttribArray(1);
             GLES30.glBindVertexArray(0);
         }
     }
