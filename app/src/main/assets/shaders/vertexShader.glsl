@@ -1,12 +1,12 @@
 #version 300 es
 
 in vec3 position;
+in vec2 textureCoords;
 
-out vec3 colour;
-
+out vec2 passTextureCoords;
 void main(void){
 
     gl_Position = vec4(position, 1.0);
-    colour = vec3(position.x + 0.5, 0.5f, position.y+0.5);
+    passTextureCoords = textureCoords;
 
 }
