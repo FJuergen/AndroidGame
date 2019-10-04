@@ -12,20 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hs_kl.gatav.gles05colorcube.models.RawModel;
+import de.hs_kl.gatav.gles05colorcube.objConverter.ModelData;
 
 public class Loader  {
     private List<Integer> vaos = new ArrayList<Integer>();
     private List<Integer> vbos = new ArrayList<Integer>();
     private List<Integer> textures = new ArrayList<>();
 
-    public RawModel loadToVAO(float[] positions, int[] indices, float[] textureCoords){
+    public RawModel loadToVAO(float[] positions, int[] indices,float[] normals, float[] textureCoords){
         int vaoID = createVAO();
         bindIndicesToBuffer(indices);
         storeDataInAttributeList(0,3 ,positions);
         storeDataInAttributeList(1,2 ,textureCoords);
+        storeDataInAttributeList(2,3,normals);
         unbindVAO();
         return new RawModel(vaoID,indices.length);
     }
+
 
     private void bindIndicesToBuffer(int[] indices){
         int[] vboID = new int[1];

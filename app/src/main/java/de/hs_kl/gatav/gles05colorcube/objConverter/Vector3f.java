@@ -1,7 +1,7 @@
 package de.hs_kl.gatav.gles05colorcube.objConverter;
 
 public class Vector3f {
-    float x, y, z;
+    public float x, y, z;
     public Vector3f(float x, float y, float z){
         this.x = x;
         this.y = y;

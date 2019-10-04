@@ -1,24 +1,19 @@
 package de.hs_kl.gatav.gles05colorcube.shaders;
 
-import android.app.Activity;
-import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
-import android.opengl.GLES31;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.renderscript.Matrix4f;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
-import java.nio.IntBuffer;
+import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import javax.microedition.khronos.opengles.GL11;
 
 import de.hs_kl.gatav.gles05colorcube.MainActivity;
+import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
 
 public abstract class ShaderProgram {
 
@@ -26,20 +21,51 @@ public abstract class ShaderProgram {
     private int vertexShaderID;
     private int fragmentShaderID;
 
+    private static FloatBuffer matrixBuffer = FloatBuffer.allocate(16);
+
     public ShaderProgram(String vertexFile, String fragmentFile){
         vertexShaderID = loadShader(vertexFile,GLES20.GL_VERTEX_SHADER);
         fragmentShaderID = loadShader(fragmentFile,GLES20.GL_FRAGMENT_SHADER);
         programID = GLES20.glCreateProgram();
         GLES20.glAttachShader(programID,vertexShaderID);
         GLES20.glAttachShader(programID,fragmentShaderID);
+        bindAttributes();
         GLES20.glLinkProgram(programID);
         GLES20.glValidateProgram(programID);
-        bindAttributes();
+        getAllUniformLocations();
 
     }
 
     public void start(){
         GLES20.glUseProgram(programID);
+    }
+
+    protected abstract void getAllUniformLocations();
+
+    protected int getUniformLocation(String uniformName){
+        return GLES30.glGetUniformLocation(programID,uniformName);
+    }
+
+    protected void loadFloat(int location, float value){
+        GLES30.glUniform1f(location,value);
+    }
+
+    protected void loadVector(int location, Vector3f vector){
+        GLES30.glUniform3f(location, vector.x,vector.y,vector.z);
+    }
+
+    protected void loadBoolean(int location, boolean value){
+        float toLoad = 0;
+        if(value){
+            toLoad = 1;
+        }
+        GLES30.glUniform1f(location, toLoad);
+    }
+
+    protected void loadMatrix(int location, Matrix4f matrix){
+        matrixBuffer.put(matrix.getArray());
+        matrixBuffer.flip();
+        GLES30.glUniformMatrix4fv(location,1,false,matrix.getArray(),0);
     }
 
     public void stop(){

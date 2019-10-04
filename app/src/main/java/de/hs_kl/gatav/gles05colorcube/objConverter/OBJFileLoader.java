@@ -5,23 +5,26 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hs_kl.gatav.gles05colorcube.MainActivity;
 
 
 public class OBJFileLoader {
 	
-	private static final String RES_LOC = "res/";
+	private static final String RES_LOC = "models/";
 
 	public static ModelData loadOBJ(String objFileName) {
-		FileReader isr = null;
-		File objFile = new File(RES_LOC + objFileName + ".obj");
+		BufferedReader reader = null;
+
 		try {
-			isr = new FileReader(objFile);
-		} catch (FileNotFoundException e) {
-			System.err.println("File not found in res; don't use any extention");
+			reader = new BufferedReader(new InputStreamReader(MainActivity.assetManager.open(RES_LOC + objFileName + ".obj")));
+		} catch (IOException e) {
+			System.err.println("Could not find File!");
+			e.printStackTrace();
 		}
-		BufferedReader reader = new BufferedReader(isr);
 		String line;
 		List<Vertex> vertices = new ArrayList<Vertex>();
 		List<Vector2f> textures = new ArrayList<Vector2f>();
@@ -74,9 +77,8 @@ public class OBJFileLoader {
 		float furthest = convertDataToArrays(vertices, textures, normals, verticesArray,
 				texturesArray, normalsArray);
 		int[] indicesArray = convertIndicesListToArray(indices);
-		ModelData data = new ModelData(verticesArray, texturesArray, normalsArray, indicesArray,
+		return new ModelData(verticesArray, texturesArray, normalsArray, indicesArray,
 				furthest);
-		return data;
 	}
 
 	private static void processVertex(String[] vertex, List<Vertex> vertices, List<Integer> indices) {
@@ -143,7 +145,6 @@ public class OBJFileLoader {
 				vertices.add(duplicateVertex);
 				indices.add(duplicateVertex.getIndex());
 			}
-
 		}
 	}
 	
@@ -155,5 +156,4 @@ public class OBJFileLoader {
 			}
 		}
 	}
-
 }
