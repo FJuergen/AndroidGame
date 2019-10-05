@@ -1,4 +1,4 @@
-package de.hs_kl.gatav.gles05colorcube;
+package de.hs_kl.gatav.gles05colorcube.renderEngine;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +11,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hs_kl.gatav.gles05colorcube.MainActivity;
 import de.hs_kl.gatav.gles05colorcube.models.RawModel;
 import de.hs_kl.gatav.gles05colorcube.objConverter.ModelData;
 

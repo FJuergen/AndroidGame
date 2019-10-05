@@ -6,9 +6,9 @@ import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Debug;
 import android.renderscript.Matrix4f;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,10 +25,11 @@ import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
 import de.hs_kl.gatav.gles05colorcube.objConverter.ModelData;
 import de.hs_kl.gatav.gles05colorcube.objConverter.OBJFileLoader;
 import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
+import de.hs_kl.gatav.gles05colorcube.renderEngine.Loader;
+import de.hs_kl.gatav.gles05colorcube.renderEngine.MasterRenderer;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
 import de.hs_kl.gatav.gles05colorcube.textures.ModelTexture;
 import de.hs_kl.gatav.gles05colorcube.toolbox.Maths;
-import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //Debug.waitForDebugger();
         MainActivity.assetManager = getAssets();
         touchableGLSurfaceView = new TouchableGLSurfaceView(this);
         setContentView(touchableGLSurfaceView);
@@ -263,20 +264,8 @@ class TouchableGLSurfaceView extends GLSurfaceView {
     // the implementation of the renderer interface
     private class OurRenderer implements GLSurfaceView.Renderer {
 
-        private ColorCube colorCube;
 
-        private final float FOV = 70;
-        private final float NEAR_PLANE = 0.1f;
-        private final float FAR_PLANE = 1000;
-
-        private Matrix4f projectionMatrix;
-
-        private static final String TAG = "MyGLRenderer";
-
-        private final float[] mMVPMatrix = new float[16];
-        private final float[] mProjMatrix = new float[16];
-        private final float[] mVMatrix = new float[16];
-        private final float[] mRotationMatrix = new float[16];
+        private MasterRenderer renderer;
 
         RawModel model;
 
@@ -288,17 +277,12 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         Camera camera = new Camera();
 
         // Declare as volatile because we are updating it from another thread
-        public volatile float mAngle;
         public OurRenderer() {
-            colorCube = new ColorCube();
         }
 
         public void onDrawFrame(GL10 gl) {
-            entity.increaseRotation(0,1,0);
-            shader.start();
-            prepare();
-            render(entity);
-            shader.stop();
+            renderer.processEntity(entity);
+            renderer.render(light,camera);
         }
 
         // resize of viewport
@@ -309,7 +293,7 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         // creation of viewport
         // initialization of some opengl features
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
+            renderer = new MasterRenderer();
             loader = new Loader();
             ModelData modelData = OBJFileLoader.loadOBJ("dragon");
             model = loader.loadToVAO(modelData.getVertices(),modelData.getIndices(),modelData.getNormals(),modelData.getTextureCoords());
@@ -320,55 +304,6 @@ class TouchableGLSurfaceView extends GLSurfaceView {
             entity = new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0,1);
             light = new Light(new Vector3f(0,5,-5),new Vector3f(1,1,1));
             shader = new StaticShader();
-            createProjectionMatrix();
-            shader.start();
-            shader.loadProjectionMatrix(projectionMatrix);
-            shader.stop();
-            GLES30.glEnable(GLES20.GL_CULL_FACE);
-            GLES30.glCullFace(GLES20.GL_BACK);
-        }
-
-        public void prepare(){
-            GLES30.glClearColor(0, 0,0,0);
-            GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
-            GLES30.glEnable(GL10.GL_DEPTH_TEST);
-        }
-
-        public void render(Entity entity){
-            TexturedModel texturedModel = entity.getModel();
-            RawModel rawModel = texturedModel.getModel();
-            ModelTexture texture = texturedModel.getTexture();
-            GLES30.glBindVertexArray(rawModel.getVaoID());
-            GLES30.glEnableVertexAttribArray(0);
-            GLES30.glEnableVertexAttribArray(1);
-            GLES30.glEnableVertexAttribArray(2);
-            Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(),entity.getRotx(),entity.getRoty(),entity.getRotz(),entity.getScale());
-            shader.loadTransformationMatrix(transformationMatrix);
-            shader.loadViewMatrix(camera);
-            shader.loadLight(light);
-            shader.loadShineVariables(texture.getShineDamper(),texture.getReflectivity());
-            GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D,texturedModel.getTexture().getTextureID());
-            GLES30.glDrawElements(GLES30.GL_TRIANGLES,  rawModel.getVertexCount(),GLES30.GL_UNSIGNED_INT,0);
-            GLES30.glDisableVertexAttribArray(0);
-            GLES30.glDisableVertexAttribArray(1);
-            GLES30.glDisableVertexAttribArray(2);
-            GLES30.glBindVertexArray(0);
-        }
-
-        private void createProjectionMatrix(){
-            float aspectRatio = (float) getWidth() / (float) getHeight();
-            float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
-            float x_scale = y_scale / aspectRatio;
-            float frustum_length = FAR_PLANE - NEAR_PLANE;
-
-            projectionMatrix = new Matrix4f();
-            projectionMatrix.set(0,0,x_scale);
-            projectionMatrix.set(1,1,y_scale);
-            projectionMatrix.set(2,2,-((FAR_PLANE + NEAR_PLANE) / frustum_length) );
-            projectionMatrix.set(2,3,-1);
-            projectionMatrix.set(3,2, -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
-            projectionMatrix.set(3,3,0);
         }
     }
 
