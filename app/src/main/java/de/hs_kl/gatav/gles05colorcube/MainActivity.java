@@ -32,6 +32,7 @@ import de.hs_kl.gatav.gles05colorcube.renderEngine.MasterRenderer;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
 import de.hs_kl.gatav.gles05colorcube.textures.ModelTexture;
 import de.hs_kl.gatav.gles05colorcube.gameLogic.MapLoader;
+import de.hs_kl.gatav.gles05colorcube.gameLogic.Map;
 import de.hs_kl.gatav.gles05colorcube.toolbox.Maths;
 
 
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private final int MENU_RESET = 1, MENU_PAN = 2, MENU_ZOOM = 3;
     private final int GROUP_DEFAULT = 0, GROUP_PAN = 1, GROUP_ZOOM = 2;
     private boolean PAN = false;
+
+    private Map currentMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         MapLoader mapLoader = new MapLoader();
         try {
-            mapLoader.load(assetManager.open("maps/map1.bmp"));
+            currentMap = mapLoader.load(assetManager.open("maps/map1.bmp"));
         } catch (IOException e) {
         }
     }
