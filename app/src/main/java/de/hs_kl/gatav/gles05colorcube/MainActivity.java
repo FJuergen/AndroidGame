@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -29,6 +31,7 @@ import de.hs_kl.gatav.gles05colorcube.renderEngine.Loader;
 import de.hs_kl.gatav.gles05colorcube.renderEngine.MasterRenderer;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
 import de.hs_kl.gatav.gles05colorcube.textures.ModelTexture;
+import de.hs_kl.gatav.gles05colorcube.gameLogic.MapLoader;
 import de.hs_kl.gatav.gles05colorcube.toolbox.Maths;
 
 
@@ -50,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(touchableGLSurfaceView);
         touchableGLSurfaceView.setFocusableInTouchMode(true);
         touchableGLSurfaceView.requestFocus();
+
+        MapLoader mapLoader = new MapLoader();
+        try {
+            mapLoader.load(assetManager.open("maps/map1.bmp"));
+        } catch (IOException e) {
+        }
     }
 
     @Override
