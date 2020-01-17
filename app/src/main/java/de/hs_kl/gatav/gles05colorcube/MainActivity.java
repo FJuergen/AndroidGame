@@ -1,13 +1,14 @@
 package de.hs_kl.gatav.gles05colorcube;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.opengl.GLES20;
-import android.opengl.GLES30;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.os.Debug;
-import android.renderscript.Matrix4f;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,9 +41,11 @@ public class MainActivity extends AppCompatActivity {
     public static AssetManager assetManager;
     public GameManager gameManager;
 
+
     private final int MENU_RESET = 1, MENU_PAN = 2, MENU_ZOOM = 3;
     private final int GROUP_DEFAULT = 0, GROUP_PAN = 1, GROUP_ZOOM = 2;
     private boolean PAN = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +54,13 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.assetManager = getAssets();
         gameManager = new GameManager(assetManager);
         gameManager.loadLevel(1);
+
         touchableGLSurfaceView = new TouchableGLSurfaceView(this);
         setContentView(touchableGLSurfaceView);
         touchableGLSurfaceView.setFocusableInTouchMode(true);
         touchableGLSurfaceView.requestFocus();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,10 +121,12 @@ public class MainActivity extends AppCompatActivity {
 
 // touchable GLSurfaceView with
 // an implementation of a virtual trackball rotation control
-class TouchableGLSurfaceView extends GLSurfaceView {
+class TouchableGLSurfaceView extends GLSurfaceView{
     private OurRenderer ourRenderer;
     private GameManager gameManager;
     private StaticShader shader;
+    private RotationSensor sensor;
+
     Loader loader;
 
     static public boolean guiZoom = true;
@@ -157,12 +164,14 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         super(context);
         setEGLContextClientVersion(3);
 
-
+        sensor = new RotationSensor(context);
         ourRenderer = new OurRenderer();
         setRenderer(ourRenderer);
 
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -287,6 +296,11 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         }
 
         public void onDrawFrame(GL10 gl) {
+            float[] rotations = sensor.getDeviceRotation();
+            entity.setRotv(rotations[3]);
+            entity.setRotx(rotations[0]);
+            entity.setRoty(rotations[1]);
+            entity.setRotz(rotations[2]);
             renderer.processEntity(entity);
             renderer.render(light,camera);
         }
@@ -308,8 +322,9 @@ class TouchableGLSurfaceView extends GLSurfaceView {
             texture.setReflectivity(0.75f);
             texture.setShineDamper(10);
             entity = new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0,1);
-            light = new Light(new Vector3f(0,5,-5),new Vector3f(1,1,1));
+            light = new Light(new Vector3f(0,5,-5),new Vector3f(1,0,1));
             shader = new StaticShader();
+
         }
     }
 
@@ -325,3 +340,49 @@ class TouchableGLSurfaceView extends GLSurfaceView {
         Trackball.trackball(CURRENT_QUATERNION, 0.0f, 0.0f, 0.0f, 0.0f);
     }
 }
+
+class RotationSensor extends Activity implements SensorEventListener {
+    private final SensorManager sensorManager;
+    private final Sensor rotation;
+
+    float[] rotations = {0,0,0,0};
+
+    private final float epsilon = 0.0f;
+
+
+
+
+    public RotationSensor(Context context) {
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        rotation = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    public void onSensorChanged(SensorEvent event) {
+        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+            for(int i = 0; i<event.values.length; i++){
+                if(Math.abs(event.values[i])>epsilon){
+                    rotations[i] = -event.values[i];
+                }
+            }
+        }
+    }
+    public float[] getDeviceRotation(){
+        return rotations;
+    }
+
+}
+

@@ -92,6 +92,11 @@ public class Loader  {
             GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
             GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
 
+            GLES30.glGenerateMipmap(textureID[0]);
+
+            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR_MIPMAP_LINEAR);
+            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_MAX_TEXTURE_LOD_BIAS, -0.4f);
+
             GLUtils.texImage2D(GLES30.GL_TEXTURE_2D,0,bitmap,0);
             bitmap.recycle();
 
