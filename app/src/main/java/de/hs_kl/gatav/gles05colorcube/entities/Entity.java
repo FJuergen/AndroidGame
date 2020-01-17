@@ -7,7 +7,7 @@ public class Entity {
 
     private TexturedModel model;
     private Vector3f position;
-    private float rotx,roty,rotz;
+    private float rotx,roty,rotz,rotv;
     private float scale;
 
     public Entity(TexturedModel model, Vector3f position, float rotx, float roty, float rotz, float scale) {
@@ -53,6 +53,13 @@ public class Entity {
 
     public void setRotx(float rotx) {
         this.rotx = rotx;
+    }
+    public float getRotv() {
+        return rotv;
+    }
+
+    public void setRotv(float rotv) {
+        this.rotv = rotv;
     }
 
     public float getRoty() {
