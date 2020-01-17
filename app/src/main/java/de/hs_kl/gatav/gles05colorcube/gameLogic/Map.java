@@ -26,22 +26,17 @@ public class Map {
 
                 if (col.red() > 0.9 && col.green() > 0.9 && col.blue() > 0.9) {
                     e = MapObjectType.GOAL;
-                    System.out.println(x + "x, " + y + "y: GOAL");
                 }
                 else if (col.red() > 0.9) {
                     e = MapObjectType.START;
-                    System.out.println(x + "x, " + y + "y: START");
                 }
                 else if (col.green() > 0.9) {
                     e = MapObjectType.WALL;
-                    System.out.println(x + "x, " + y + "y: WALL");
                 }
                 else if (col.blue() > 0.9) {
                     e = MapObjectType.DEATH;
-                    System.out.println(x + "x, " + y + "y: DEATH");
                 } else {
                     e = MapObjectType.EMPTY;
-                    System.out.println(x + "x, " + y + "y: EMPTY");
                 }
             }
         }
