@@ -31,37 +31,30 @@ import de.hs_kl.gatav.gles05colorcube.renderEngine.Loader;
 import de.hs_kl.gatav.gles05colorcube.renderEngine.MasterRenderer;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
 import de.hs_kl.gatav.gles05colorcube.textures.ModelTexture;
-import de.hs_kl.gatav.gles05colorcube.gameLogic.MapLoader;
-import de.hs_kl.gatav.gles05colorcube.gameLogic.Map;
+import de.hs_kl.gatav.gles05colorcube.gameLogic.GameManager;
 import de.hs_kl.gatav.gles05colorcube.toolbox.Maths;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private GLSurfaceView touchableGLSurfaceView;
     public static AssetManager assetManager;
+    public GameManager gameManager;
 
     private final int MENU_RESET = 1, MENU_PAN = 2, MENU_ZOOM = 3;
     private final int GROUP_DEFAULT = 0, GROUP_PAN = 1, GROUP_ZOOM = 2;
     private boolean PAN = false;
-
-    private Map currentMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Debug.waitForDebugger();
         MainActivity.assetManager = getAssets();
+        gameManager = new GameManager(assetManager);
+        gameManager.loadLevel(1);
         touchableGLSurfaceView = new TouchableGLSurfaceView(this);
         setContentView(touchableGLSurfaceView);
         touchableGLSurfaceView.setFocusableInTouchMode(true);
         touchableGLSurfaceView.requestFocus();
-
-        MapLoader mapLoader = new MapLoader();
-        try {
-            currentMap = mapLoader.load(assetManager.open("maps/map1.bmp"));
-        } catch (IOException e) {
-        }
     }
 
     @Override
@@ -125,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 // an implementation of a virtual trackball rotation control
 class TouchableGLSurfaceView extends GLSurfaceView {
     private OurRenderer ourRenderer;
+    private GameManager gameManager;
     private StaticShader shader;
     Loader loader;
 

@@ -1,42 +1,41 @@
 package de.hs_kl.gatav.gles05colorcube.gameLogic;
+import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import java.util.Random;
 
 public class Map {
-    private enum MapObjectType {
+    public enum MapObjectType {
         EMPTY,
-        START,
         DEATH,
         WALL,
         GOAL
     }
     private MapObjectType[][] mapMap;
+    private int height;
+    private int width;
 
     public Map(Bitmap map) {
-        int height = map.getHeight();
-        int width = map.getWidth();
+        height = map.getHeight();
+        width = map.getWidth();
         mapMap = new MapObjectType[height][width];
 
         for (int y = 0; y < mapMap.length; y++) {
             MapObjectType[] row = mapMap[y];
 
             for (int x = 0; x <  row.length; x++) {
-                MapObjectType e = row[x];
                 Color col = map.getColor(x, y);
 
-                if (col.red() > 0.9 && col.green() > 0.9 && col.blue() > 0.9) {
-                    e = MapObjectType.GOAL;
-                }
-                else if (col.red() > 0.9) {
-                    e = MapObjectType.START;
+                if (col.red() > 0.9) {
+                    row[x] = MapObjectType.GOAL;
                 }
                 else if (col.green() > 0.9) {
-                    e = MapObjectType.WALL;
+                    row[x] = MapObjectType.WALL;
                 }
                 else if (col.blue() > 0.9) {
-                    e = MapObjectType.DEATH;
+                    row[x] = MapObjectType.DEATH;
                 } else {
-                    e = MapObjectType.EMPTY;
+                    row[x] = MapObjectType.EMPTY;
                 }
             }
         }
@@ -44,5 +43,18 @@ public class Map {
 
     public MapObjectType getObjectAt(int x, int y) {
         return mapMap[y][x];
+    }
+
+    public Vector3f getEmptyCoordinates() {
+        Random random = new Random();
+        int randX = random.nextInt(width);
+        int randY = random.nextInt(height);
+        MapObjectType e = mapMap[randY][randX];
+
+        if (e == MapObjectType.EMPTY) {
+            return new Vector3f(randX, randY, 0);
+        } else {
+            return getEmptyCoordinates();
+        }
     }
 }
