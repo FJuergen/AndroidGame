@@ -285,7 +285,6 @@ class TouchableGLSurfaceView extends GLSurfaceView{
         ModelTexture texture;
         TexturedModel texturedModel;
         Entity entity;
-        Light light;
 
         Camera camera = new Camera();
 
@@ -315,14 +314,15 @@ class TouchableGLSurfaceView extends GLSurfaceView{
             loader = new Loader();
             ModelData modelData = OBJFileLoader.loadOBJ("dragon");
             model = loader.loadToVAO(modelData.getVertices(),modelData.getIndices(),modelData.getNormals(),modelData.getTextureCoords());
-            //texture = new ModelTexture(loader.loadTexture("purple.png"));
+            texture = new ModelTexture(loader.loadTexture("purple.png"));
             texturedModel = new TexturedModel(model,texture);
             texture.setReflectivity(0.75f);
             texture.setShineDamper(10);
             entity = new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0, 1, 1);
-            light = new Light(new Vector3f(0,5,-5),new Vector3f(1,0,1));
-            light = new Light(new Vector3f(0,-5,-5),new Vector3f(1,1,1));
+            Light light = new Light(new Vector3f(0,5,-5),new Vector3f(1,0,1));
+            Light light2 = new Light(new Vector3f(0,5,5),new Vector3f(0,1,1));
             lights.add(light);
+            lights.add(light2);
             shader = new StaticShader();
 
         }

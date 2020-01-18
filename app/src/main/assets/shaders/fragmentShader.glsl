@@ -38,7 +38,6 @@ void main(void){
         float dampedFactor = pow(specularFactor, shineDamper);
         totalSpecular += dampedFactor * reflectivity * lightColour[i];
     }
-    float brightness = max(nDotl, 0.2);
-
+    totalDiffuse = max(totalDiffuse,0.0);
     out_colour = (vec4(totalDiffuse,1.0) * texture(textureSampler,passTextureCoords)) + vec4(totalSpecular,1.0);
 }
