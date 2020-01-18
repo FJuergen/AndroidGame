@@ -1,12 +1,9 @@
 package de.hs_kl.gatav.gles05colorcube.renderEngine;
 
 import android.content.res.Resources;
-import android.hardware.display.DisplayManager;
 import android.opengl.GLES30;
 import android.renderscript.Matrix4f;
-import android.util.DisplayMetrics;
 
-import de.hs_kl.gatav.gles05colorcube.MainActivity;
 import de.hs_kl.gatav.gles05colorcube.entities.Camera;
 import de.hs_kl.gatav.gles05colorcube.entities.Entity;
 import de.hs_kl.gatav.gles05colorcube.entities.Light;
@@ -45,16 +42,16 @@ public class MasterRenderer {
 
     }
 
-    public void render(Light sun, Camera camera){
+    public void render(List<Light> lights, Camera camera){
         prepare();
         shader.start();
-        shader.loadLight(sun);
+        shader.loadLights(lights);
         shader.loadViewMatrix(camera);
         entityRenderer.render(entities);
         shader.stop();
 
         /*terrainShader.start();
-        terrainShader.loadLight(sun);
+        terrainShader.loadLights(sun);
         terrainShader.loadViewMatrix(camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();

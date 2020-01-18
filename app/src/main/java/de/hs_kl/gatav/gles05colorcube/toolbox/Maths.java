@@ -28,24 +28,23 @@ public class Maths {
         double sqz = rz*rz;
 
         // invs (inverse square length) is only required if quaternion is not already normalised
-        double invs = 1 / (sqx + sqy + sqz + sqw);
-        rotation.set(0,0,(float) ((sqx - sqy - sqz + sqw)*invs)); // since sqw + sqx + sqy + sqz =1/invs*invs
-        rotation.set(1,1,(float) ((-sqx + sqy - sqz + sqw)*invs)) ;
-        rotation.set(2,2,(float)((-sqx - sqy + sqz + sqw)*invs ));
+        rotation.set(0,0,(float) ((sqx - sqy - sqz + sqw))); // since sqw + sqx + sqy + sqz =1/invs*invs
+        rotation.set(1,1,(float) ((-sqx + sqy - sqz + sqw))) ;
+        rotation.set(2,2,(float)((-sqx - sqy + sqz + sqw) ));
 
         double tmp1 = rx*ry;
         double tmp2 = rz*rotv;
-        rotation.set(1,0,(float)( 2.0 * (tmp1 + tmp2)*invs)) ;
-        rotation.set(0,1,(float)( 2.0 * (tmp1 - tmp2)*invs ));
+        rotation.set(1,0,(float)( 2.0 * (tmp1 + tmp2))) ;
+        rotation.set(0,1,(float)( 2.0 * (tmp1 - tmp2) ));
 
         tmp1 = rx*rz;
         tmp2 = ry*rotv;
-        rotation.set(2,0,(float)(2.0 * (tmp1 - tmp2)*invs)) ;
-        rotation.set(0,2,(float)(2.0 * (tmp1 + tmp2)*invs)) ;
+        rotation.set(2,0,(float)(2.0 * (tmp1 - tmp2))) ;
+        rotation.set(0,2,(float)(2.0 * (tmp1 + tmp2))) ;
         tmp1 = ry*rz;
         tmp2 = rx*rotv;
-        rotation.set(2,1,(float)( 2.0 * (tmp1 + tmp2)*invs));
-        rotation.set(1,2,(float)(2.0 * (tmp1 - tmp2)*invs)) ;
+        rotation.set(2,1,(float)( 2.0 * (tmp1 + tmp2)));
+        rotation.set(1,2,(float)(2.0 * (tmp1 - tmp2))) ;
 
         Matrix4f matrix = new Matrix4f();
         matrix.loadIdentity();
