@@ -48,7 +48,7 @@ public class RotationSensor extends Activity implements SensorEventListener {
     }
     /**
      *
-     * @return float array with Azimuth Pitch Roll
+     * @return float array with Azimuth Pitch Roll in Radians
      */
     static public float[] getDeviceRotation(){
         //SensorManager.getAngleChange(rot,rotMatrix,prevRotMatrix);

@@ -51,7 +51,7 @@ public abstract class ShaderProgram {
         GLES30.glUniform1f(location,value);
     }
     protected void loadInt(int location, int value){
-        GLES30.glUniform1f(location,value);
+        GLES30.glUniform1i(location,value);
     }
 
     protected void loadVector(int location, Vector3f vector){

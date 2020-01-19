@@ -22,9 +22,8 @@ public class Entity {
         this.scale = scale;
     }
 
-    public Entity(TexturedModel model, int index, Vector3f position, float rotx, float roty, float rotz,
+    public Entity(TexturedModel model,  Vector3f position, float rotx, float roty, float rotz,
                   float scale) {
-        this.textureIndex = index;
         this.model = model;
         this.position = position;
         this.rotx = rotx;

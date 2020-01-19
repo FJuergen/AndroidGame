@@ -56,6 +56,7 @@ public class NormalMappingRenderer {
 		GLES30.glEnableVertexAttribArray(0);
 		GLES30.glEnableVertexAttribArray(1);
 		GLES30.glEnableVertexAttribArray(2);
+		GLES30.glEnableVertexAttribArray(3);
 		ModelTexture texture = model.getTexture();
 		shader.loadNumberOfRows(texture.getNumberOfRows());
 		/*if (texture.isHasTransparency()) {
@@ -64,7 +65,9 @@ public class NormalMappingRenderer {
 		 */
 		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-		GLES30.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getTextureID());
+		GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, model.getTexture().getTextureID());
+		GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
+		GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, model.getTexture().getNormalMap());
 	}
 
 	private void unbindTexturedModel() {
@@ -72,6 +75,7 @@ public class NormalMappingRenderer {
 		GLES30.glDisableVertexAttribArray(0);
 		GLES30.glDisableVertexAttribArray(1);
 		GLES30.glDisableVertexAttribArray(2);
+		GLES30.glDisableVertexAttribArray(3);
 		GLES30.glBindVertexArray(0);
 	}
 

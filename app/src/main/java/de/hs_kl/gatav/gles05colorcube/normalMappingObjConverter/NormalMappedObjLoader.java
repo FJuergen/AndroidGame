@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hs_kl.gatav.gles05colorcube.MainActivity;
 import de.hs_kl.gatav.gles05colorcube.models.RawModel;
 import de.hs_kl.gatav.gles05colorcube.renderEngine.Loader;
 import de.hs_kl.gatav.gles05colorcube.vector.Vector2f;
@@ -16,17 +18,17 @@ import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
 
 public class NormalMappedObjLoader {
 
-	private static final String RES_LOC = "res/";
+	private static final String RES_LOC = "models/";
 
 	public static RawModel loadOBJ(String objFileName, Loader loader) {
-		FileReader isr = null;
-		File objFile = new File(RES_LOC + objFileName + ".obj");
+		BufferedReader reader = null;
 		try {
-			isr = new FileReader(objFile);
+			reader = new BufferedReader(new InputStreamReader(MainActivity.assetManager.open(RES_LOC + objFileName + ".obj")));
 		} catch (FileNotFoundException e) {
 			System.err.println("File not found in res; don't use any extention");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		BufferedReader reader = new BufferedReader(isr);
 		String line;
 		List<VertexNM> vertices = new ArrayList<VertexNM>();
 		List<Vector2f> textures = new ArrayList<Vector2f>();
@@ -82,7 +84,7 @@ public class NormalMappedObjLoader {
 				texturesArray, normalsArray, tangentsArray);
 		int[] indicesArray = convertIndicesListToArray(indices);
 
-		return loader.loadToVAO(verticesArray, indicesArray, normalsArray, texturesArray);
+		return loader.loadToVAO(verticesArray, indicesArray, normalsArray, tangentsArray, texturesArray);
 	}
 
 	//NEW 

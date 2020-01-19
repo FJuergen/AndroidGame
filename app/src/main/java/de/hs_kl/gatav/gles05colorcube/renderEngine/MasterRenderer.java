@@ -7,8 +7,10 @@ import de.hs_kl.gatav.gles05colorcube.entities.Camera;
 import de.hs_kl.gatav.gles05colorcube.entities.Entity;
 import de.hs_kl.gatav.gles05colorcube.entities.Light;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
+import de.hs_kl.gatav.gles05colorcube.normalMappingRenderer.NormalMappingRenderer;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
 import de.hs_kl.gatav.gles05colorcube.vector.Matrix4f;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector4f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,20 +24,23 @@ public class MasterRenderer {
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000;
 
-    public static final float RED = 0;
-    public static final float GREEN = 0;
-    public static final float BLUE = 0;
+    public static final float RED = 0.3f;
+    public static final float GREEN = 0.2f;
+    public static final float BLUE = 0.2f;
 
     private static Matrix4f projectionMatrix;
 
     private StaticShader shader = new StaticShader();
     private EntityRenderer entityRenderer;
 
+    private NormalMappingRenderer normalMappingRenderer;
+
     //private TerrainShader terrainShader = new TerrainShader();
     private TerrainRenderer terrainRenderer;
 
 
     private Map<TexturedModel,List<Entity>> entities = new HashMap<>();
+    private Map<TexturedModel,List<Entity>> normalEntities = new HashMap<>();
     //private List<Terrain> terrains = new ArrayList<>();
 
 
@@ -43,17 +48,31 @@ public class MasterRenderer {
         enableCulling();
         createProjectionMatrix();
         entityRenderer = new EntityRenderer(shader,projectionMatrix);
+        normalMappingRenderer = new NormalMappingRenderer(projectionMatrix);
         //terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 
     }
 
-    public void render(List<Light> lights, Camera camera){
+    public void renderScene(List<Entity> entities, List<Entity> normalEntities, List<Light> lights,
+    Vector4f clipPlane,Camera camera){
+        for(Entity entity : entities){
+            processEntity(entity);
+        }
+        for(Entity entity : normalEntities){
+            processNormalEntity(entity);
+        }
+        render(lights,camera, clipPlane);
+    }
+
+    public void render(List<Light> lights, Camera camera, Vector4f clipPlane){
         prepare();
         shader.start();
         shader.loadLights(lights);
         shader.loadViewMatrix(camera);
         entityRenderer.render(entities);
         shader.stop();
+
+        normalMappingRenderer.render(normalEntities, clipPlane, lights,camera);
 
         /*terrainShader.start();
         terrainShader.loadLights(sun);
@@ -64,6 +83,7 @@ public class MasterRenderer {
         terrains.clear();
         */
         entities.clear();
+        normalEntities.clear();
     }
 
     /*public void processTerrain(Terrain terrain){
@@ -83,9 +103,21 @@ public class MasterRenderer {
             entities.put(entityModel,newBatch);
         }
     }
+    public void processNormalEntity(Entity entity){
+        TexturedModel entityModel = entity.getModel();
+        List<Entity> batch = normalEntities.get(entityModel);
+        if(batch!=null){
+            batch.add(entity);
+        }else{
+            List<Entity> newBatch = new ArrayList<Entity>();
+            newBatch.add(entity);
+            normalEntities.put(entityModel,newBatch);
+        }
+    }
 
     public void cleanUp(){
         shader.cleanUp();
+        normalMappingRenderer.cleanUp();
         //terrainShader.cleanUp();
     }
 
