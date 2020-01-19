@@ -12,9 +12,11 @@ out vec4 out_colour;
 
 uniform sampler2D textureSampler;
 uniform vec3 lightColour[4];
+uniform vec3 attenuation[4];
 
 uniform float shineDamper;
 uniform float reflectivity;
+
 
 void main(void){
     vec3 unitNormal = normalize(surfaceNormal);
@@ -23,20 +25,22 @@ void main(void){
     vec3 totalDiffuse = vec3(0.0);
     vec3 totalSpecular = vec3(0.0);
     for(int i = 0; i<4; i++){
+        float distance = length(toLightVector[i]);
+        float attFactor = attenuation[i].x + (attenuation[i].y * distance) + (attenuation[i].z * distance * distance);
         vec3 unitLightVector = normalize(toLightVector[i]);
 
         vec3 lightDirection = -unitLightVector;
 
         float nDotl = dot(unitLightVector, unitNormal);
         float brightness = max(nDotl, 0.0);
-        totalDiffuse += brightness * lightColour[i];
+        totalDiffuse += (brightness * lightColour[i])/attFactor;
 
         vec3 reflectedLightDirection = reflect(lightDirection, unitNormal);
 
         float specularFactor = dot(reflectedLightDirection, unitVectorToCamera);
         specularFactor = max(specularFactor, 0.0);
         float dampedFactor = pow(specularFactor, shineDamper);
-        totalSpecular += dampedFactor * reflectivity * lightColour[i];
+        totalSpecular += (dampedFactor * reflectivity * lightColour[i])/attFactor;
     }
     totalDiffuse = max(totalDiffuse,0.0);
     out_colour = (vec4(totalDiffuse,1.0) * texture(textureSampler,passTextureCoords)) + vec4(totalSpecular,1.0);

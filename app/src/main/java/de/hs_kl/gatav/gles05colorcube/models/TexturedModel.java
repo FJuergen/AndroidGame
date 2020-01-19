@@ -16,6 +16,10 @@ public class TexturedModel  {
         return model;
     }
 
+    public int getNumberOfRows(){
+        return 1;
+    }
+
     public ModelTexture getTexture() {
         return texture;
     }

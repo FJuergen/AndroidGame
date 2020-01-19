@@ -54,9 +54,6 @@ public class RotationSensor extends Activity implements SensorEventListener {
         //SensorManager.getAngleChange(rot,rotMatrix,prevRotMatrix);
         //prevRotMatrix = rotMatrix;
         SensorManager.getOrientation(rotMatrix,rot);
-        for(int i = 0; i<rot.length;i++){
-            rot[i] = (float)(Math.toDegrees(rot[i])+360)%360;
-        }
         return rot;
     }
 

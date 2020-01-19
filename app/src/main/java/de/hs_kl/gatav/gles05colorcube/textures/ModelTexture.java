@@ -6,6 +6,13 @@ public class ModelTexture {
     private float shineDamper = 1;
     private float reflectivity = 0;
 
+    private int numberOfRows = 1;
+
+
+    public int getNumberOfRows() {
+        return numberOfRows;
+    }
+
     public float getShineDamper() {
         return shineDamper;
     }

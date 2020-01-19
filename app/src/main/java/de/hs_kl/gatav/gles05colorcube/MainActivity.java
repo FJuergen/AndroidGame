@@ -23,13 +23,13 @@ import de.hs_kl.gatav.gles05colorcube.models.RawModel;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
 import de.hs_kl.gatav.gles05colorcube.objConverter.ModelData;
 import de.hs_kl.gatav.gles05colorcube.objConverter.OBJFileLoader;
-import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
 import de.hs_kl.gatav.gles05colorcube.renderEngine.Loader;
 import de.hs_kl.gatav.gles05colorcube.renderEngine.MasterRenderer;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
 import de.hs_kl.gatav.gles05colorcube.textures.ModelTexture;
 import de.hs_kl.gatav.gles05colorcube.gameLogic.GameManager;
 import de.hs_kl.gatav.gles05colorcube.toolbox.RotationSensor;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -281,10 +281,10 @@ class TouchableGLSurfaceView extends GLSurfaceView{
         RawModel model;
 
         List<Light> lights = new ArrayList<>();
+        List<Entity> entities = new ArrayList<>();
 
         ModelTexture texture;
         TexturedModel texturedModel;
-        Entity entity;
 
         Camera camera = new Camera();
 
@@ -295,10 +295,13 @@ class TouchableGLSurfaceView extends GLSurfaceView{
         public void onDrawFrame(GL10 gl) {
             float[] rotations = RotationSensor.getDeviceRotation();
             //entity.increaseRotation((float)Math.toDegrees(rotations[0]), (float)Math.toDegrees(rotations[1]), (float)Math.toDegrees(rotations[2]));
-            entity.setRotx(-rotations[1]);
-            entity.setRoty(rotations[2]);
-            entity.setRotz(-rotations[0]);
-            renderer.processEntity(entity);
+            for(Entity entity : entities) {
+            }
+            entities.get(0).setRotx(-rotations[1]);
+            entities.get(0).setRoty(rotations[2]);
+            entities.get(0).setRotz(-rotations[0]);
+            renderer.processEntity(entities.get(0));
+
             renderer.render(lights,camera);
         }
 
@@ -318,11 +321,11 @@ class TouchableGLSurfaceView extends GLSurfaceView{
             texturedModel = new TexturedModel(model,texture);
             texture.setReflectivity(0.75f);
             texture.setShineDamper(10);
-            entity = new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0, 1, 1);
-            Light light = new Light(new Vector3f(0,5,-5),new Vector3f(1,0,1));
-            Light light2 = new Light(new Vector3f(0,5,5),new Vector3f(0,1,1));
-            lights.add(light);
-            lights.add(light2);
+            entities.add(new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0, 1, 1));
+            lights.add(new Light(new Vector3f(0,5,-5),new Vector3f(.5f,.5f,.5f)));
+            lights.add(new Light(new Vector3f(0,5,5),new Vector3f(0,2,0), new Vector3f(1,0.01f,0.002f)));
+            lights.add(new Light(new Vector3f(0,-5,5),new Vector3f(0,0,2), new Vector3f(1,0.01f,0.002f)));
+            lights.add(new Light(new Vector3f(0,-5,-5),new Vector3f(2,0,0), new Vector3f(1,0.01f,0.002f)));
             shader = new StaticShader();
 
         }

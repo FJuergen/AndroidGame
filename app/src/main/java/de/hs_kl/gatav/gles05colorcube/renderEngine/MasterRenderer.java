@@ -2,13 +2,13 @@ package de.hs_kl.gatav.gles05colorcube.renderEngine;
 
 import android.content.res.Resources;
 import android.opengl.GLES30;
-import android.renderscript.Matrix4f;
 
 import de.hs_kl.gatav.gles05colorcube.entities.Camera;
 import de.hs_kl.gatav.gles05colorcube.entities.Entity;
 import de.hs_kl.gatav.gles05colorcube.entities.Light;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
+import de.hs_kl.gatav.gles05colorcube.vector.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +21,11 @@ public class MasterRenderer {
     private static final float FOV = 70;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000;
+
+    public static final float RED = 0;
+    public static final float GREEN = 0;
+    public static final float BLUE = 0;
+
     private static Matrix4f projectionMatrix;
 
     private StaticShader shader = new StaticShader();
@@ -101,12 +106,12 @@ public class MasterRenderer {
         float frustum_length = FAR_PLANE - NEAR_PLANE;
 
         projectionMatrix = new Matrix4f();
-        projectionMatrix.set(0,0,x_scale);
-        projectionMatrix.set(1,1,y_scale);
-        projectionMatrix.set(2,2,-((FAR_PLANE + NEAR_PLANE) / frustum_length) );
-        projectionMatrix.set(2,3,-1);
-        projectionMatrix.set(3,2, -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
-        projectionMatrix.set(3,3,0);
+        projectionMatrix.m00 = x_scale;
+        projectionMatrix.m11 = y_scale;
+        projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length) ;
+        projectionMatrix.m23 = -1;
+        projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
+        projectionMatrix.m33 = 0;
     }
 
     public static void enableCulling(){

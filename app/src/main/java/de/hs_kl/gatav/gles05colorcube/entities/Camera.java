@@ -1,8 +1,6 @@
 package de.hs_kl.gatav.gles05colorcube.entities;
 
-import de.hs_kl.gatav.gles05colorcube.R;
-import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
-import io.github.controlwear.virtual.joystick.android.JoystickView;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
 
 public class Camera {
 

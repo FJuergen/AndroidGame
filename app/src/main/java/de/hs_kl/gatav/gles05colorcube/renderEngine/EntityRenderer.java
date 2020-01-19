@@ -1,12 +1,12 @@
 package de.hs_kl.gatav.gles05colorcube.renderEngine;
 
 import android.opengl.GLES30;
-import android.renderscript.Matrix4f;
 
 import de.hs_kl.gatav.gles05colorcube.entities.Entity;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
 import de.hs_kl.gatav.gles05colorcube.toolbox.Maths;
+import de.hs_kl.gatav.gles05colorcube.vector.Matrix4f;
 
 import java.util.List;
 import java.util.Map;
