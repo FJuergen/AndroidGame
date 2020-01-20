@@ -23,7 +23,7 @@ public class MasterRenderer {
 
     public static final float FOV = 100;
     public static final float NEAR_PLANE = 0.1f;
-    public static final float FAR_PLANE = 1000;
+    public static final float FAR_PLANE = 100;
 
     public static final float RED = 0.3f;
     public static final float GREEN = 0.2f;
@@ -51,7 +51,7 @@ public class MasterRenderer {
         createProjectionMatrix();
         entityRenderer = new EntityRenderer(shader,projectionMatrix);
         normalMappingRenderer = new NormalMappingRenderer(projectionMatrix);
-        shadowMapMasterRenderer = new ShadowMapMasterRenderer(camera);
+        this.shadowMapMasterRenderer = new ShadowMapMasterRenderer(camera);
         //terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 
     }
@@ -139,7 +139,7 @@ public class MasterRenderer {
 
     public void prepare() {
         GLES30.glEnable(GLES30.GL_DEPTH_TEST);
-        GLES30.glClearColor(1, 0, 0, 1);
+        GLES30.glClearColor(0, 0, 0, 1);
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
         GLES30.glActiveTexture(GLES30.GL_TEXTURE5);
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, getShadowMaptexture());

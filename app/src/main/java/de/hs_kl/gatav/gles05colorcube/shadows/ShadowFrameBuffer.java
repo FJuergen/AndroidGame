@@ -1,7 +1,7 @@
 package de.hs_kl.gatav.gles05colorcube.shadows;
 
 import android.content.res.Resources;
-import android.opengl.GLES30;
+import android.opengl.GLES32;
 
 import java.nio.ByteBuffer;
 
@@ -41,8 +41,8 @@ public class ShadowFrameBuffer {
 	 * Deletes the frame buffer and shadow map texture when the game closes.
 	 */
 	protected void cleanUp() {
-		//GLES30.glDeleteFramebuffers(fbo);
-		//GLES30.glDeleteTextures(shadowMap);
+		//GLES32.glDeleteFramebuffers(fbo);
+		//GLES32.glDeleteTextures(shadowMap);
 	}
 
 	/**
@@ -57,8 +57,8 @@ public class ShadowFrameBuffer {
 	 * render target.
 	 */
 	protected void unbindFrameBuffer() {
-		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
-		GLES30.glViewport(0, 0, Resources.getSystem().getDisplayMetrics().widthPixels, Resources.getSystem().getDisplayMetrics().heightPixels);
+		GLES32.glBindFramebuffer(GLES32.GL_FRAMEBUFFER, 0);
+		GLES32.glViewport(0, 0, Resources.getSystem().getDisplayMetrics().widthPixels, Resources.getSystem().getDisplayMetrics().heightPixels);
 	}
 
 	/**
@@ -88,9 +88,9 @@ public class ShadowFrameBuffer {
 	 *            - the height of the frame buffer.
 	 */
 	private static void bindFrameBuffer(int frameBuffer, int width, int height) {
-		GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0);
-		GLES30.glBindFramebuffer(GLES30.GL_DRAW_FRAMEBUFFER, frameBuffer);
-		GLES30.glViewport(0, 0, width, height);
+		GLES32.glBindTexture(GLES32.GL_TEXTURE_2D, 0);
+		GLES32.glBindFramebuffer(GLES32.GL_DRAW_FRAMEBUFFER, frameBuffer);
+		GLES32.glViewport(0, 0, width, height);
 	}
 
 	/**
@@ -101,12 +101,12 @@ public class ShadowFrameBuffer {
 	 * @return The newly created frame buffer's ID.
 	 */
 	private static int createFrameBuffer() {
-		int[] buf = {GLES30.GL_NONE};
+		int[] buf = {GLES32.GL_NONE};
 		int[] frameBuffer = new int[1];
-		GLES30.glGenFramebuffers(1,frameBuffer,0);
-		GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, frameBuffer[0]);
-		GLES30.glDrawBuffers(1,buf,0);
-		GLES30.glReadBuffer(GLES30.GL_NONE);
+		GLES32.glGenFramebuffers(1,frameBuffer,0);
+		GLES32.glBindFramebuffer(GLES32.GL_FRAMEBUFFER, frameBuffer[0]);
+		GLES32.glDrawBuffers(1,buf,0);
+		GLES32.glReadBuffer(GLES32.GL_NONE);
 		return frameBuffer[0];
 	}
 
@@ -121,15 +121,15 @@ public class ShadowFrameBuffer {
 	 */
 	private static int createDepthBufferAttachment(int width, int height) {
 		int[] texture = new int[1];
-		GLES30.glGenTextures(1,texture,0);
-		GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, texture[0]);
-		GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_DEPTH_COMPONENT16, width, height, 0,
-				GLES30.GL_DEPTH_COMPONENT, GLES30.GL_FLOAT, (ByteBuffer) null);
-		GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_NEAREST);
-		GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
-		GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
-		GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
-		GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_DEPTH_ATTACHMENT,GLES30.GL_TEXTURE_2D, texture[0], 0);
+		GLES32.glGenTextures(1,texture,0);
+		GLES32.glBindTexture(GLES32.GL_TEXTURE_2D, texture[0]);
+		GLES32.glTexImage2D(GLES32.GL_TEXTURE_2D, 0, GLES32.GL_DEPTH_COMPONENT16, width, height, 0,
+				GLES32.GL_DEPTH_COMPONENT, GLES32.GL_FLOAT, null);
+		GLES32.glTexParameteri(GLES32.GL_TEXTURE_2D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_NEAREST);
+		GLES32.glTexParameteri(GLES32.GL_TEXTURE_2D, GLES32.GL_TEXTURE_MAG_FILTER, GLES32.GL_NEAREST);
+		GLES32.glTexParameteri(GLES32.GL_TEXTURE_2D, GLES32.GL_TEXTURE_WRAP_S, GLES32.GL_CLAMP_TO_EDGE);
+		GLES32.glTexParameteri(GLES32.GL_TEXTURE_2D, GLES32.GL_TEXTURE_WRAP_T, GLES32.GL_CLAMP_TO_EDGE);
+		GLES32.glFramebufferTexture(GLES32.GL_FRAMEBUFFER, GLES32.GL_DEPTH_ATTACHMENT, texture[0], 0);
 		return texture[0];
 	}
 }

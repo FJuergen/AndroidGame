@@ -305,7 +305,6 @@ class TouchableGLSurfaceView extends GLSurfaceView{
             float[] rotations = RotationSensor.getDeviceRotation();
             //entity.increaseRotation((float)Math.toDegrees(rotations[0]), (float)Math.toDegrees(rotations[1]), (float)Math.toDegrees(rotations[2]));
             renderer.renderShadowMap(normalEntities, lights.get(0));
-            //guis.get(0).setTexture(renderer.getShadowMaptexture());
             for(Entity entity : normalEntities) {
                 //entity.setRotx(-rotations[1]);
                 //entity.setRoty(rotations[2]);
@@ -343,7 +342,7 @@ class TouchableGLSurfaceView extends GLSurfaceView{
 
 
 
-            guis.add(new GuiTexture(loader.loadTexture("barrel"),new Vector2f(0.5f,0.5f),new Vector2f(0.25f,0.25f)));
+            guis.add(new GuiTexture(renderer.getShadowMaptexture(),new Vector2f(0.5f,0.5f),new Vector2f(0.25f,0.25f)));
 
             TexturedModel barrelModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("barrel", loader),
                     new ModelTexture(loader.loadTexture("barrel")));

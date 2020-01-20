@@ -24,13 +24,13 @@ public class RotationSensor extends Activity implements SensorEventListener {
 
     public RotationSensor(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        rotation = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
-        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_GAME);
+        rotation = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     protected void onPause() {
@@ -42,7 +42,7 @@ public class RotationSensor extends Activity implements SensorEventListener {
     }
 
     public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR){
+        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
             SensorManager.getRotationMatrixFromVector(rotMatrix,event.values);
         }
     }
