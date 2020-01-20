@@ -11,11 +11,16 @@ public class GameManager {
         assetManager = assManager;
     }
 
+    public void onDrawFrame() {
+        player.moveByRotation();
+    }
+
     public void loadLevel(int level) {
         MapLoader mapLoader = new MapLoader();
         try {
             currentMap = mapLoader.load(assetManager.open("maps/map" + level + ".bmp"));
         } catch (IOException e) {
+            e.printStackTrace();
         }
         player = new Player(currentMap.getEmptyCoordinates());
     }

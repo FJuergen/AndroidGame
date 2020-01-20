@@ -50,7 +50,7 @@ public class RotationSensor extends Activity implements SensorEventListener {
      *
      * @return float array with Azimuth Pitch Roll in Radians
      */
-    static public float[] getDeviceRotation(){
+    public float[] getDeviceRotation(){
         //SensorManager.getAngleChange(rot,rotMatrix,prevRotMatrix);
         //prevRotMatrix = rotMatrix;
         SensorManager.getOrientation(rotMatrix,rot);
