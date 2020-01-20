@@ -1,12 +1,14 @@
 #version 300 es
 precision highp float;
 
+
 in vec2 passTextureCoords;
 in vec3 surfaceNormal;
 in vec3 toLightVector;
 in vec3 toCameraVector;
 
 out vec4 out_colour;
+
 
 uniform sampler2D textureSampler;
 uniform vec3 lightColour;
