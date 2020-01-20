@@ -35,7 +35,9 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
     public static RotationSensor rotationSensor;
     private GameManager gameManager;
 
-    public static Loader loader;
+    private long lastFrameTime;
+
+    Loader loader;
 
     public TouchableGLSurfaceView(Context context) {
         super(context);
@@ -45,7 +47,6 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
         gameManager = new GameManager(MainActivity.assetManager);
         gameManager.loadLevel(1);
         setRenderer(ourRenderer);
-
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
@@ -65,12 +66,16 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
 
         Camera camera = new Camera();
 
-        // Declare as volatile because we are updating it from another thread
         public OurRenderer() {
+            lastFrameTime = System.currentTimeMillis();
         }
 
         public void onDrawFrame(GL10 gl) {
-            gameManager.onDrawFrame();
+            long delta = System.currentTimeMillis() - lastFrameTime;
+            float deltaTime = (float) delta / 1000;
+            lastFrameTime = System.currentTimeMillis();
+
+            gameManager.update(deltaTime);
 
             float[] rotations = rotationSensor.getDeviceRotation();
             //entity.increaseRotation((float)Math.toDegrees(rotations[0]), (float)Math.toDegrees(rotations[1]), (float)Math.toDegrees(rotations[2]));

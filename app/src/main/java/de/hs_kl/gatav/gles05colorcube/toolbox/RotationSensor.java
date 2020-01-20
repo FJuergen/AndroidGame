@@ -56,5 +56,4 @@ public class RotationSensor extends Activity implements SensorEventListener {
         SensorManager.getOrientation(rotMatrix,rot);
         return rot;
     }
-
 }
