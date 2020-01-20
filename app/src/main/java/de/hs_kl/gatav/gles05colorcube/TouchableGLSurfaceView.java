@@ -91,7 +91,7 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
         // creation of viewport
         // initialization of some opengl features
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-            renderer = new MasterRenderer();
+            renderer = new MasterRenderer(camera);
             loader = new Loader();
             ModelData modelData = OBJFileLoader.loadOBJ("dragon");
             model = loader.loadToVAO(modelData.getVertices(),modelData.getIndices(),modelData.getNormals(),modelData.getTextureCoords());
