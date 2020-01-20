@@ -9,6 +9,7 @@ import de.hs_kl.gatav.gles05colorcube.entities.Light;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
 import de.hs_kl.gatav.gles05colorcube.normalMappingRenderer.NormalMappingRenderer;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
+import de.hs_kl.gatav.gles05colorcube.shadows.ShadowMapMasterRenderer;
 import de.hs_kl.gatav.gles05colorcube.vector.Matrix4f;
 import de.hs_kl.gatav.gles05colorcube.vector.Vector4f;
 
@@ -20,9 +21,9 @@ import java.util.Map;
 public class MasterRenderer {
 
 
-    private static final float FOV = 70;
-    private static final float NEAR_PLANE = 0.1f;
-    private static final float FAR_PLANE = 1000;
+    public static final float FOV = 100;
+    public static final float NEAR_PLANE = 0.1f;
+    public static final float FAR_PLANE = 1000;
 
     public static final float RED = 0.3f;
     public static final float GREEN = 0.2f;
@@ -34,6 +35,7 @@ public class MasterRenderer {
     private EntityRenderer entityRenderer;
 
     private NormalMappingRenderer normalMappingRenderer;
+    private ShadowMapMasterRenderer shadowMapMasterRenderer;
 
     //private TerrainShader terrainShader = new TerrainShader();
     private TerrainRenderer terrainRenderer;
@@ -44,11 +46,12 @@ public class MasterRenderer {
     //private List<Terrain> terrains = new ArrayList<>();
 
 
-    public MasterRenderer(){
+    public MasterRenderer(Camera camera){
         enableCulling();
         createProjectionMatrix();
         entityRenderer = new EntityRenderer(shader,projectionMatrix);
         normalMappingRenderer = new NormalMappingRenderer(projectionMatrix);
+        shadowMapMasterRenderer = new ShadowMapMasterRenderer(camera);
         //terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 
     }
@@ -72,7 +75,7 @@ public class MasterRenderer {
         entityRenderer.render(entities);
         shader.stop();
 
-        normalMappingRenderer.render(normalEntities, clipPlane, lights,camera);
+        normalMappingRenderer.render(normalEntities, clipPlane, lights,camera, shadowMapMasterRenderer.getToShadowMapSpaceMatrix());
 
         /*terrainShader.start();
         terrainShader.loadLights(sun);
@@ -118,29 +121,43 @@ public class MasterRenderer {
     public void cleanUp(){
         shader.cleanUp();
         normalMappingRenderer.cleanUp();
+        shadowMapMasterRenderer.cleanUp();
         //terrainShader.cleanUp();
+    }
+
+    public void renderShadowMap(List<Entity> entitiesList, Light sun){
+        for(Entity entity : entitiesList){
+            processEntity(entity);
+        }
+        shadowMapMasterRenderer.render(entities, sun);
+        entities.clear();
+    }
+
+    public int getShadowMaptexture(){
+        return shadowMapMasterRenderer.getShadowMap();
     }
 
     public void prepare() {
         GLES30.glEnable(GLES30.GL_DEPTH_TEST);
-        GLES30.glClearColor(0, 0, 0, 1);
+        GLES30.glClearColor(1, 0, 0, 1);
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE5);
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, getShadowMaptexture());
     }
 
 
     private void createProjectionMatrix(){
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
-
-        float aspectRatio = (float) width / (float) height;
-        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
+        float width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        float height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        projectionMatrix = new Matrix4f();
+        float aspectRatio =  width / height;
+        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
         float x_scale = y_scale / aspectRatio;
         float frustum_length = FAR_PLANE - NEAR_PLANE;
 
-        projectionMatrix = new Matrix4f();
         projectionMatrix.m00 = x_scale;
         projectionMatrix.m11 = y_scale;
-        projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length) ;
+        projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length);
         projectionMatrix.m23 = -1;
         projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
         projectionMatrix.m33 = 0;

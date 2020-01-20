@@ -16,7 +16,6 @@ public class EntityRenderer {
 
     public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix) {
         this.shader = shader;
-        System.out.println(projectionMatrix);
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
