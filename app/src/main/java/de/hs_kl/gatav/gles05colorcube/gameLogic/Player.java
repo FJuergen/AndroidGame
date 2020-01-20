@@ -1,5 +1,6 @@
 package de.hs_kl.gatav.gles05colorcube.gameLogic;
-import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
+
+import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
 
 public class Player {
     private Vector3f pos;

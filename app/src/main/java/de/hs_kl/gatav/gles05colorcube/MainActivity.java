@@ -1,12 +1,7 @@
 package de.hs_kl.gatav.gles05colorcube;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +10,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -25,15 +21,17 @@ import de.hs_kl.gatav.gles05colorcube.entities.Entity;
 import de.hs_kl.gatav.gles05colorcube.entities.Light;
 import de.hs_kl.gatav.gles05colorcube.models.RawModel;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
+import de.hs_kl.gatav.gles05colorcube.normalMappingObjConverter.NormalMappedObjLoader;
 import de.hs_kl.gatav.gles05colorcube.objConverter.ModelData;
 import de.hs_kl.gatav.gles05colorcube.objConverter.OBJFileLoader;
-import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
 import de.hs_kl.gatav.gles05colorcube.renderEngine.Loader;
 import de.hs_kl.gatav.gles05colorcube.renderEngine.MasterRenderer;
 import de.hs_kl.gatav.gles05colorcube.shaders.StaticShader;
 import de.hs_kl.gatav.gles05colorcube.textures.ModelTexture;
 import de.hs_kl.gatav.gles05colorcube.gameLogic.GameManager;
-import de.hs_kl.gatav.gles05colorcube.toolbox.Maths;
+import de.hs_kl.gatav.gles05colorcube.toolbox.RotationSensor;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector4f;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -103,10 +101,12 @@ class TouchableGLSurfaceView extends GLSurfaceView{
 
         RawModel model;
 
+        List<Light> lights = new ArrayList<>();
+        List<Entity> entities = new ArrayList<>();
+        List<Entity> normalEntities = new ArrayList<>();
+
         ModelTexture texture;
         TexturedModel texturedModel;
-        Entity entity;
-        Light light;
 
         Camera camera = new Camera();
 
@@ -115,13 +115,16 @@ class TouchableGLSurfaceView extends GLSurfaceView{
         }
 
         public void onDrawFrame(GL10 gl) {
-            float[] rotations = sensor.getDeviceRotation();
-            entity.setRotv(rotations[3]);
-            entity.setRotx(rotations[0]);
-            entity.setRoty(rotations[1]);
-            entity.setRotz(rotations[2]);
-            renderer.processEntity(entity);
-            renderer.render(light,camera);
+            float[] rotations = RotationSensor.getDeviceRotation();
+            //entity.increaseRotation((float)Math.toDegrees(rotations[0]), (float)Math.toDegrees(rotations[1]), (float)Math.toDegrees(rotations[2]));
+            for(Entity entity : normalEntities) {
+                entity.setRotx(-rotations[1]);
+                entity.setRoty(rotations[2]);
+                entity.setRotz(-rotations[0]);
+            }
+            //camera.setPitch(rotations[1]);
+            //camera.setYaw(rotations[0]);
+            renderer.renderScene(entities, normalEntities, lights,new Vector4f(0, -1, 0, 100000), camera);
         }
 
         // resize of viewport
@@ -136,60 +139,47 @@ class TouchableGLSurfaceView extends GLSurfaceView{
             loader = new Loader();
             ModelData modelData = OBJFileLoader.loadOBJ("dragon");
             model = loader.loadToVAO(modelData.getVertices(),modelData.getIndices(),modelData.getNormals(),modelData.getTextureCoords());
-            texture = new ModelTexture(loader.loadTexture("purple.png"));
+            texture = new ModelTexture(loader.loadTexture("purple"));
             texturedModel = new TexturedModel(model,texture);
             texture.setReflectivity(0.75f);
             texture.setShineDamper(10);
-            entity = new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0,1);
-            light = new Light(new Vector3f(0,5,-5),new Vector3f(1,0,1));
+            lights.add(new Light(new Vector3f(0,50,-50),new Vector3f(.5f,.5f,.5f)));
+            lights.add(new Light(new Vector3f(0,0,5),new Vector3f(0,2,0), new Vector3f(1,0.01f,0.002f)));
+            lights.add(new Light(new Vector3f(0,-5,5),new Vector3f(0,0,2), new Vector3f(1,0.01f,0.002f)));
+            lights.add(new Light(new Vector3f(0,-5,-5),new Vector3f(2,0,0), new Vector3f(1,0.01f,0.002f)));
+
+
+            TexturedModel barrelModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("barrel", loader),
+                    new ModelTexture(loader.loadTexture("barrel")));
+            barrelModel.getTexture().setNormalMap(loader.loadTexture("barrelNormal"));
+            barrelModel.getTexture().setShineDamper(10);
+            barrelModel.getTexture().setReflectivity(0.5f);
+
+            TexturedModel crateModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("crate", loader),
+                    new ModelTexture(loader.loadTexture("crate")));
+            crateModel.getTexture().setNormalMap(loader.loadTexture("crateNormal"));
+            crateModel.getTexture().setShineDamper(10);
+            crateModel.getTexture().setReflectivity(0.5f);
+
+            TexturedModel boulderModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("boulder", loader),
+                    new ModelTexture(loader.loadTexture("boulder")));
+            boulderModel.getTexture().setNormalMap(loader.loadTexture("boulderNormal"));
+            boulderModel.getTexture().setShineDamper(10);
+            boulderModel.getTexture().setReflectivity(0.5f);
+
+
+            Entity entity = new Entity(barrelModel, new Vector3f(0, 0, -15), 0f, 0f, 0f, 1f);
+            Entity entity2 = new Entity(boulderModel, new Vector3f(0, 0, -15), 0, 0, 0, 1f);
+            Entity entity3 = new Entity(crateModel, new Vector3f(0, 0, -15), 0, 0, 0, 0.04f);
+
+            normalEntities.add(entity2);
+            //normalEntities.add(entity2);
+            //normalEntities.add(entity3);
+            //entities.add(new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0, 1, 1));
+
             shader = new StaticShader();
 
         }
     }
-}
-
-class RotationSensor extends Activity implements SensorEventListener {
-    private final SensorManager sensorManager;
-    private final Sensor rotation;
-
-    float[] rotations = {0,0,0,0};
-
-    private final float epsilon = 0.0f;
-
-
-
-
-    public RotationSensor(Context context) {
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        rotation = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_FASTEST);
-    }
-
-    protected void onResume() {
-        super.onResume();
-        sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_FASTEST);
-    }
-
-    protected void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
-    }
-
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
-
-    public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
-            for(int i = 0; i<event.values.length; i++){
-                if(Math.abs(event.values[i])>epsilon){
-                    rotations[i] = -event.values[i];
-                }
-            }
-        }
-    }
-    public float[] getDeviceRotation(){
-        return rotations;
-    }
-
 }
 

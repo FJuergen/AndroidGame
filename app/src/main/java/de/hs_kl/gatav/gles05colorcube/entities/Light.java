@@ -1,16 +1,24 @@
 package de.hs_kl.gatav.gles05colorcube.entities;
 
-import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
 
 public class Light {
 
     private Vector3f position;
     private Vector3f colour;
+    private Vector3f attenuation = new Vector3f(1f,0f,0f);
 
     public Light(Vector3f position, Vector3f colour) {
         this.position = position;
         this.colour = colour;
     }
+    public Light(Vector3f position, Vector3f colour,Vector3f attenuation) {
+        this.position = position;
+        this.colour = colour;
+        this.attenuation = attenuation;
+    }
+
+    public Vector3f getAttenuation(){return attenuation;}
 
     public Vector3f getPosition() {
         return position;
