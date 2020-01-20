@@ -13,6 +13,7 @@ import de.hs_kl.gatav.gles05colorcube.entities.Camera;
 import de.hs_kl.gatav.gles05colorcube.entities.Entity;
 import de.hs_kl.gatav.gles05colorcube.entities.Light;
 import de.hs_kl.gatav.gles05colorcube.gameLogic.GameManager;
+import de.hs_kl.gatav.gles05colorcube.gameLogic.Tile;
 import de.hs_kl.gatav.gles05colorcube.models.RawModel;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
 import de.hs_kl.gatav.gles05colorcube.normalMappingObjConverter.NormalMappedObjLoader;
@@ -34,7 +35,7 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
     public static RotationSensor rotationSensor;
     private GameManager gameManager;
 
-    Loader loader;
+    public static Loader loader;
 
     public TouchableGLSurfaceView(Context context) {
         super(context);
@@ -74,12 +75,12 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
             float[] rotations = rotationSensor.getDeviceRotation();
             //entity.increaseRotation((float)Math.toDegrees(rotations[0]), (float)Math.toDegrees(rotations[1]), (float)Math.toDegrees(rotations[2]));
             for(Entity entity : normalEntities) {
-                entity.setRotx(-rotations[1]);
-                entity.setRoty(rotations[2]);
-                entity.setRotz(-rotations[0]);
+                //entity.setRotx(-rotations[1]);
+                //entity.setRoty(rotations[2]);
+                //entity.setRotz(-rotations[0]);
             }
-            //camera.setPitch(rotations[1]);
-            //camera.setYaw(rotations[0]);
+            camera.setPitch(rotations[1]);
+            camera.setYaw(-rotations[2]);
             renderer.renderScene(entities, normalEntities, lights,new Vector4f(0, -1, 0, 100000), camera);
         }
 
@@ -99,15 +100,15 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
             texturedModel = new TexturedModel(model,texture);
             texture.setReflectivity(0.75f);
             texture.setShineDamper(10);
-            lights.add(new Light(new Vector3f(0,50,-50),new Vector3f(.5f,.5f,.5f)));
-            lights.add(new Light(new Vector3f(0,0,5),new Vector3f(0,2,0), new Vector3f(1,0.01f,0.002f)));
-            lights.add(new Light(new Vector3f(0,-5,5),new Vector3f(0,0,2), new Vector3f(1,0.01f,0.002f)));
-            lights.add(new Light(new Vector3f(0,-5,-5),new Vector3f(2,0,0), new Vector3f(1,0.01f,0.002f)));
+            lights.add(new Light(new Vector3f(0,50,50),new Vector3f(.5f,.5f,.5f)));
+            lights.add(new Light(new Vector3f(0,5,0),new Vector3f(0,2,0), new Vector3f(1,0.01f,0.002f)));
+            lights.add(new Light(new Vector3f(0,-5,0),new Vector3f(0,0,2), new Vector3f(1,0.01f,0.002f)));
+            lights.add(new Light(new Vector3f(-5,-5,0),new Vector3f(2,0,0), new Vector3f(1,0.01f,0.002f)));
 
 
-            TexturedModel barrelModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("barrel", loader),
-                    new ModelTexture(loader.loadTexture("barrel")));
-            barrelModel.getTexture().setNormalMap(loader.loadTexture("barrelNormal"));
+            TexturedModel barrelModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("sphere", loader),
+                    new ModelTexture(loader.loadTexture("white")));
+            barrelModel.getTexture().setNormalMap(loader.loadTexture("flat"));
             barrelModel.getTexture().setShineDamper(10);
             barrelModel.getTexture().setReflectivity(0.5f);
 
@@ -124,12 +125,21 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
             boulderModel.getTexture().setReflectivity(0.5f);
 
 
-            Entity entity = new Entity(barrelModel, new Vector3f(0, 0, -15), 0f, 0f, 0f, 1f);
+            Entity entity = new Entity(barrelModel, new Vector3f(0, 0, -15), 0f, 0f, 0f, 5f);
             Entity entity2 = new Entity(boulderModel, new Vector3f(0, 0, -15), 0, 0, 0, 1f);
             Entity entity3 = new Entity(crateModel, new Vector3f(0, 0, -15), 0, 0, 0, 0.04f);
 
-            normalEntities.add(entity2);
-            //normalEntities.add(entity2);
+
+            TexturedModel brickModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("brick", loader),
+                    new ModelTexture(loader.loadTexture("brick_wall")));
+            brickModel.getTexture().setNormalMap(loader.loadTexture("brick_wall_normal"));
+            brickModel.getTexture().setShineDamper(10);
+            brickModel.getTexture().setReflectivity(0.5f);
+
+            Tile tile = new Tile(brickModel,new Vector3f(0, 0, -15), 0f, 0f, 0f, 3f);
+
+            normalEntities.addAll(gameManager.generateBoard());
+            //normalEntities.add(tile);
             //normalEntities.add(entity3);
             //entities.add(new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0, 1, 1));
 

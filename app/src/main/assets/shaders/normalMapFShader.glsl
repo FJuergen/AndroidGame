@@ -60,4 +60,5 @@ void main(void){
 	out_Color = mix(vec4(skyColour,1.0),out_Color, visibility);
 
 
+
 }

@@ -16,6 +16,14 @@ public class Map {
     private int height;
     private int width;
 
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
     public Map(Bitmap map) {
         height = map.getHeight();
         width = map.getWidth();

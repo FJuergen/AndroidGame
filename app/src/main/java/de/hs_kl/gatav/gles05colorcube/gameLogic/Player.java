@@ -22,7 +22,7 @@ public class Player {
     public void moveByRotation() {
         float[] rotations = TouchableGLSurfaceView.rotationSensor.getDeviceRotation();
         for (float rot : rotations) {
-            System.out.println(rot);
+            //System.out.println(rot);
         }
     }
 
