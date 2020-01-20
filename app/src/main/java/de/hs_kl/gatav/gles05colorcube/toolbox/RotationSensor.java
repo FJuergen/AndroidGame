@@ -24,7 +24,7 @@ public class RotationSensor extends Activity implements SensorEventListener {
 
     public RotationSensor(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        rotation = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
+        rotation = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         sensorManager.registerListener(this, rotation, SensorManager.SENSOR_DELAY_GAME);
     }
 
@@ -42,7 +42,7 @@ public class RotationSensor extends Activity implements SensorEventListener {
     }
 
     public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR){
+        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
             SensorManager.getRotationMatrixFromVector(rotMatrix,event.values);
         }
     }
@@ -56,5 +56,4 @@ public class RotationSensor extends Activity implements SensorEventListener {
         SensorManager.getOrientation(rotMatrix,rot);
         return rot;
     }
-
 }
