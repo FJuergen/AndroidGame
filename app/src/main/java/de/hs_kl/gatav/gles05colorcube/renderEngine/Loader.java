@@ -38,6 +38,11 @@ public class Loader  {
         storeDataInAttributeList(3,3,tangents);
         unbindVAO();
         return new RawModel(vaoID,indices.length);
+    }public RawModel loadToVAO(float[] positions){
+        int vaoID = createVAO();
+        storeDataInAttributeList(0,2 ,positions);
+        unbindVAO();
+        return new RawModel(vaoID,positions.length/2);
     }
 
 

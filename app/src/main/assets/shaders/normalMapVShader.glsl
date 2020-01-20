@@ -11,11 +11,13 @@ out vec2 pass_textureCoordinates;
 out vec3 toLightVector[4];
 out vec3 toCameraVector;
 out float visibility;
+out vec4 shadowCoords;
 
 uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec3 lightPositionEyeSpace[4];
+uniform mat4 toShadowMapSpace;
 
 uniform float numberOfRows;
 uniform vec2 offset;
@@ -27,8 +29,8 @@ uniform vec4 plane;
 
 void main(void){
 
-
 	vec4 worldPosition = transformationMatrix * vec4(position,1.0);
+	shadowCoords = toShadowMapSpace * worldPosition;
 	//gl_ClipDistance[0] = dot(worldPosition, plane);
 	mat4 modelViewMatrix = viewMatrix * transformationMatrix;
 	vec4 positionRelativeToCam = modelViewMatrix * vec4(position,1.0);

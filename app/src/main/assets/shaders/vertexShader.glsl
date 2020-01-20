@@ -1,7 +1,6 @@
 #version 300 es
 precision highp float;
 
-precision highp float;
 
 
 in vec3 position;
