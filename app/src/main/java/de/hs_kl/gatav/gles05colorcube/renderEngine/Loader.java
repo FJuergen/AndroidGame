@@ -29,6 +29,21 @@ public class Loader  {
         unbindVAO();
         return new RawModel(vaoID,indices.length);
     }
+    public RawModel loadToVAO(float[] positions, int[] indices,float[] normals,float[] tangents, float[] textureCoords){
+        int vaoID = createVAO();
+        bindIndicesToBuffer(indices);
+        storeDataInAttributeList(0,3 ,positions);
+        storeDataInAttributeList(1,2 ,textureCoords);
+        storeDataInAttributeList(2,3,normals);
+        storeDataInAttributeList(3,3,tangents);
+        unbindVAO();
+        return new RawModel(vaoID,indices.length);
+    }public RawModel loadToVAO(float[] positions){
+        int vaoID = createVAO();
+        storeDataInAttributeList(0,2 ,positions);
+        unbindVAO();
+        return new RawModel(vaoID,positions.length/2);
+    }
 
 
     private void bindIndicesToBuffer(int[] indices){
@@ -86,7 +101,7 @@ public class Loader  {
         options.inScaled = false;
 
         try {
-            final Bitmap bitmap = BitmapFactory.decodeStream(MainActivity.assetManager.open("textures/" + fileName),null,options);
+            final Bitmap bitmap = BitmapFactory.decodeStream(MainActivity.assetManager.open("textures/" + fileName + ".png"),null,options);
             GLES30.glBindTexture(GLES30.GL_TEXTURE_2D,textureID[0]);
 
             GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);

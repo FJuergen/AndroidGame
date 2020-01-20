@@ -1,6 +1,8 @@
 package de.hs_kl.gatav.gles05colorcube.objConverter;
 
 
+import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
+
 public class Vertex {
 	
 	private static final int NO_INDEX = -1;

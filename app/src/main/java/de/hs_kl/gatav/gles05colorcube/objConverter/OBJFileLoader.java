@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hs_kl.gatav.gles05colorcube.MainActivity;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector2f;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
 
 
 public class OBJFileLoader {

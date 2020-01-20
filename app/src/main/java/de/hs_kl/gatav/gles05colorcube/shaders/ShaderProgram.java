@@ -2,18 +2,19 @@ package de.hs_kl.gatav.gles05colorcube.shaders;
 
 import android.opengl.GLES20;
 import android.opengl.GLES30;
-import android.renderscript.Matrix4f;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 import javax.microedition.khronos.opengles.GL11;
 
 import de.hs_kl.gatav.gles05colorcube.MainActivity;
-import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
+import de.hs_kl.gatav.gles05colorcube.vector.Matrix4f;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector2f;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector4f;
 
 public abstract class ShaderProgram {
 
@@ -49,9 +50,18 @@ public abstract class ShaderProgram {
     protected void loadFloat(int location, float value){
         GLES30.glUniform1f(location,value);
     }
+    protected void loadInt(int location, int value){
+        GLES30.glUniform1i(location,value);
+    }
 
     protected void loadVector(int location, Vector3f vector){
         GLES30.glUniform3f(location, vector.x,vector.y,vector.z);
+    }
+    protected void load2DVector(int location, Vector2f vector){
+        GLES30.glUniform2f(location, vector.x,vector.y);
+    }
+    protected void loadVector(int location, Vector4f vector){
+        GLES30.glUniform4f(location, vector.x,vector.y,vector.z,vector.w);
     }
 
     protected void loadBoolean(int location, boolean value){
@@ -63,9 +73,9 @@ public abstract class ShaderProgram {
     }
 
     protected void loadMatrix(int location, Matrix4f matrix){
-        matrixBuffer.put(matrix.getArray());
+        matrix.store(matrixBuffer);
         matrixBuffer.flip();
-        GLES30.glUniformMatrix4fv(location,1,false,matrix.getArray(),0);
+        GLES30.glUniformMatrix4fv(location,1,false,matrixBuffer.array(),0);
     }
 
     public void stop(){

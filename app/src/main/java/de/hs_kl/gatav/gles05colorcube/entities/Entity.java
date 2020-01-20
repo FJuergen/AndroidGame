@@ -1,22 +1,45 @@
 package de.hs_kl.gatav.gles05colorcube.entities;
 
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
-import de.hs_kl.gatav.gles05colorcube.objConverter.Vector3f;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
 
 public class Entity {
 
     private TexturedModel model;
     private Vector3f position;
-    private float rotx,roty,rotz;
+    private float rotx,roty,rotz,rotv;
     private float scale;
 
-    public Entity(TexturedModel model, Vector3f position, float rotx, float roty, float rotz, float scale) {
+    private int textureIndex = 0;
+
+    public Entity(TexturedModel model, Vector3f position, float rotx, float roty, float rotz,float rotv, float scale) {
+        this.model = model;
+        this.position = position;
+        this.rotx = rotx;
+        this.roty = roty;
+        this.rotz = rotz;
+        this.rotv = rotv;
+        this.scale = scale;
+    }
+
+    public Entity(TexturedModel model,  Vector3f position, float rotx, float roty, float rotz,
+                  float scale) {
         this.model = model;
         this.position = position;
         this.rotx = rotx;
         this.roty = roty;
         this.rotz = rotz;
         this.scale = scale;
+    }
+
+    public float getTextureXOffset(){
+        int column = textureIndex%model.getTexture().getNumberOfRows();
+        return (float)column/(float)model.getTexture().getNumberOfRows();
+    }
+
+    public float getTextureYOffset(){
+        int row = textureIndex/model.getTexture().getNumberOfRows();
+        return (float)row/(float)model.getTexture().getNumberOfRows();
     }
 
     public void increasePosition(float dx,float dy, float dz){
@@ -53,6 +76,13 @@ public class Entity {
 
     public void setRotx(float rotx) {
         this.rotx = rotx;
+    }
+    public float getRotv() {
+        return rotv;
+    }
+
+    public void setRotv(float rotv) {
+        this.rotv = rotv;
     }
 
     public float getRoty() {
