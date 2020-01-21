@@ -13,6 +13,8 @@ public class Player {
     private float[] transformationMatrix;
     private float speed = 5.0f;
     private float size = 1.0f;
+    private boolean dead = false;
+    private boolean done = false;
 
 
     public Player(Vector3f startCoordinates) {
@@ -22,6 +24,13 @@ public class Player {
         setX(startCoordinates.x);
         setY(startCoordinates.y);
         setZ(startCoordinates.z);
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
+    public boolean isDone() {
+        return done;
     }
 
     // 0 == pi -> (x + pi % pi)
@@ -53,56 +62,22 @@ public class Player {
         if (collision == Map.MapObjectType.EMPTY) {
             resetCounterVelocity();
             return tempMatrix;
-        } else if (collision == Map.MapObjectType.WALL) {
+        }
+        else if (collision == Map.MapObjectType.WALL) {
             lastCollisionTime = System.currentTimeMillis();
             counterVelocity = getCounterVelocity(target, map.tileSize);
-            return transformationMatrix;
         }
-
-        // Death/Goal Handling
+        else if (collision == Map.MapObjectType.GOAL) {
+            done = true;
+        }
         else {
-            return tempMatrix;
+            dead = true;
         }
+        return transformationMatrix;
     }
 
     protected float[] getCounterVelocity(Vector3f target, float objSize) {
-        int y = (int)Math.floor(target.y);
-        int x = (int)Math.floor(target.x);
-
-        float playerB = target.y + size;
-        float playerR = target.x + size;
-        float objB = y + objSize;
-        float objR = x + objSize;
-
-        float collisionB = objB - target.y;
-        float collisionR = objR - target.x;
-        float collisionT = playerB - target.y;
-        float collisionL = playerR - target.x;
-
-        // top collision
-        if (collisionT < collisionB && collisionT < collisionL && collisionT < collisionR) {
-            float[] counterVelocity = {velocity[0], -velocity[1], 0f};
-            return counterVelocity;
-        }
-        // bot collision
-        else if (collisionB < collisionT && collisionB < collisionL && collisionB < collisionR) {
-            float[] counterVelocity = {velocity[0], -velocity[1], 0f};
-            return counterVelocity;
-        }
-        // left collision
-        else if (collisionL < collisionR && collisionL < collisionT && collisionL < collisionB) {
-            float[] counterVelocity = {-velocity[0], velocity[1], 0f};
-            return counterVelocity;
-        }
-        // right collision
-        else if (collisionR < collisionL && collisionR < collisionT && collisionR < collisionB) {
-            float[] counterVelocity = {-velocity[0], velocity[1], 0f};
-            return counterVelocity;
-        }
-        else {
-            float[] counterVelocity = {1.0f, 1.0f, 1.0f};
-            return counterVelocity;
-        }
+        return counterVelocity;
     }
 
     protected void resetCounterVelocity() {
