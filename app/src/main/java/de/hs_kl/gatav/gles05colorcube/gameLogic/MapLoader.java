@@ -1,4 +1,4 @@
-package de.hs_kl.gatav.gles05colorcube.game;
+package de.hs_kl.gatav.gles05colorcube.gameLogic;
 import android.graphics.BitmapFactory;
 import java.io.InputStream;
 

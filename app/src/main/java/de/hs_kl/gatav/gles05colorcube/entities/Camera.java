@@ -18,7 +18,8 @@ public class Camera {
     private float yaw;
     private float roll;
 
-    public void move(){
+    public void move(Vector3f direction){
+        Vector3f.add(direction,position,position);
     }
 
 

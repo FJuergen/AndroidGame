@@ -1,7 +1,8 @@
-package de.hs_kl.gatav.gles05colorcube.game;
+package de.hs_kl.gatav.gles05colorcube.gameLogic;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.content.res.AssetManager;
 
@@ -9,25 +10,32 @@ import de.hs_kl.gatav.gles05colorcube.entities.Entity;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
 import de.hs_kl.gatav.gles05colorcube.normalMappingObjConverter.NormalMappedObjLoader;
 import de.hs_kl.gatav.gles05colorcube.textures.ModelTexture;
+import de.hs_kl.gatav.gles05colorcube.vector.Vector2f;
 import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
 
 import static de.hs_kl.gatav.gles05colorcube.TouchableGLSurfaceView.loader;
 
+
 public class GameManager {
 
-    private final float SCALE = .5f;
+    private float SCALE;
+
+
+    public Vector3f getPlayerLocation() {
+        return playerLocation;
+    }
+
+    Vector3f playerLocation;
 
     Map currentMap;
     AssetManager assetManager;
-    Player player;
+
+
 
     public GameManager(AssetManager assManager) {
         assetManager = assManager;
     }
 
-    public void update(float deltaTime) {
-        player.moveByRotation(deltaTime, currentMap);
-    }
 
     public void loadLevel(int level) {
         MapLoader mapLoader = new MapLoader();
@@ -36,7 +44,7 @@ public class GameManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        player = new Player(currentMap.getEmptyVectorCoordinates());
+        SCALE = currentMap.tileSize;
     }
 
     public Map getCurrentLevel() {
@@ -73,24 +81,34 @@ public class GameManager {
 
         float offsetX = -currentMap.getWidth()/2;
         float offsetY = -currentMap.getHeight()/2;
+        Random random = new Random();
+        boolean foundPlayerLocation = false;
         for(int i = 0; i< currentMap.getWidth(); i++){
             for(int j = 0; j < currentMap.getHeight(); j++){
+                System.out.println("i:" + i + " j:" + j);
+                System.out.println( new Vector3f((i + offsetX)* SCALE *  2 , (j + offsetY) * SCALE * 2, -20f ).toString());
+                System.out.println( currentMap.toMapSpace( new Vector3f((i + offsetX)* SCALE *  2 , (j + offsetY) * SCALE * 2, -20f )).toString());
                 switch(currentMap.getObjectAt(i,j)){
                     case EMPTY:
-                        retList.add(new Tile(brickModel, new Vector3f(i + offsetX, j + offsetY, -20f ), 0,0,0,SCALE));
+                        if(!foundPlayerLocation && random.nextFloat() < 0.05){
+                            playerLocation = new Vector3f((i + offsetX)* SCALE *  2 , (j + offsetY) * SCALE * 2, -20f + SCALE * 2 );
+                            foundPlayerLocation = true;
+                        }
+                        retList.add(new Tile(brickModel, new Vector3f((i + offsetX)* SCALE *  2 , (j + offsetY) * SCALE * 2, -20f ), 0,0,0,SCALE));
                         break;
                     case WALL:
-                        retList.add(new Tile(brickModel2, new Vector3f(i + offsetX, j + offsetY, -19f), 0,0,0,SCALE));
+                        retList.add(new Tile(brickModel2, new Vector3f((i + offsetX)* SCALE * 2, (j + offsetY) * SCALE* 2, -20f + SCALE * 2), 0,0,0,SCALE));
                         break;
                     case GOAL:
-                        retList.add(new Tile(goal, new Vector3f(i + offsetX, j + offsetY, -20f), 0,0,0,SCALE));
+                        retList.add(new Tile(goal, new Vector3f((i + offsetX)* SCALE * 2, (j + offsetY) * SCALE* 2, -20f), 0,0,0,SCALE));
                         break;
                     case DEATH:
-                        retList.add(new Tile(death, new Vector3f(i + offsetX, j + offsetY, -20f), 0,0,0,SCALE));
+                        retList.add(new Tile(death, new Vector3f((i + offsetX)* SCALE * 2, (j + offsetY) * SCALE*  2, -20f), 0,0,0,SCALE));
                         break;
                 }
             }
         }
         return retList;
     }
+
 }

@@ -1,8 +1,9 @@
-package de.hs_kl.gatav.gles05colorcube.game;
+package de.hs_kl.gatav.gles05colorcube.gameLogic;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import java.util.Random;
 
+import de.hs_kl.gatav.gles05colorcube.vector.Vector2f;
 import de.hs_kl.gatav.gles05colorcube.vector.Vector3f;
 
 public class Map {
@@ -54,6 +55,7 @@ public class Map {
     public MapObjectType getObjectAt(int x, int y) {
         return mapMap[y][x];
     }
+
     public MapObjectType getObjectAtVector(Vector3f target) {
         int y = (int)Math.floor(target.y / tileSize);
         int x = (int)Math.floor(target.x / tileSize);
@@ -76,4 +78,13 @@ public class Map {
             return getEmptyVectorCoordinates();
         }
     }
+
+    public Vector2f toMapSpace(Vector3f position){
+        float offsetX = -this.getWidth() / 2;
+        float offsetY = -this.getHeight() / 2;
+
+        return new Vector2f(((position.x)/(tileSize *2))- offsetX,((position.y )/(tileSize * 2))- offsetY);
+
+    }
+
 }

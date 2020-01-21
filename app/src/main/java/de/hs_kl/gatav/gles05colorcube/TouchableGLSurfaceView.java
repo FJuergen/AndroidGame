@@ -13,6 +13,7 @@ import de.hs_kl.gatav.gles05colorcube.entities.Camera;
 import de.hs_kl.gatav.gles05colorcube.entities.Entity;
 import de.hs_kl.gatav.gles05colorcube.entities.Light;
 import de.hs_kl.gatav.gles05colorcube.gameLogic.GameManager;
+import de.hs_kl.gatav.gles05colorcube.gameLogic.Player;
 import de.hs_kl.gatav.gles05colorcube.gameLogic.Tile;
 import de.hs_kl.gatav.gles05colorcube.models.RawModel;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
@@ -37,7 +38,7 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
 
     private long lastFrameTime;
 
-    Loader loader;
+    public static Loader loader;
 
     public TouchableGLSurfaceView(Context context) {
         super(context);
@@ -45,7 +46,6 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
         ourRenderer = new OurRenderer();
         rotationSensor = new RotationSensor(context);
         gameManager = new GameManager(MainActivity.assetManager);
-        gameManager.loadLevel(1);
         setRenderer(ourRenderer);
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
@@ -56,7 +56,7 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
         private MasterRenderer renderer;
 
         RawModel model;
-
+        Player player;
         List<Light> lights = new ArrayList<>();
         List<Entity> entities = new ArrayList<>();
         List<Entity> normalEntities = new ArrayList<>();
@@ -73,9 +73,11 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
         public void onDrawFrame(GL10 gl) {
             long delta = System.currentTimeMillis() - lastFrameTime;
             float deltaTime = (float) delta / 1000;
+
+            player.move(deltaTime,gameManager.getCurrentLevel());
             lastFrameTime = System.currentTimeMillis();
 
-            gameManager.update(deltaTime);
+
 
             float[] rotations = rotationSensor.getDeviceRotation();
             //entity.increaseRotation((float)Math.toDegrees(rotations[0]), (float)Math.toDegrees(rotations[1]), (float)Math.toDegrees(rotations[2]));
@@ -84,8 +86,8 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
                 //entity.setRoty(rotations[2]);
                 //entity.setRotz(-rotations[0]);
             }
-            camera.setPitch(rotations[1]);
-            camera.setYaw(-rotations[2]);
+            //camera.setPitch(rotations[1]);
+            //camera.setYaw(-rotations[2]);
             renderer.renderScene(entities, normalEntities, lights,new Vector4f(0, -1, 0, 100000), camera);
         }
 
@@ -99,6 +101,7 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             renderer = new MasterRenderer(camera);
             loader = new Loader();
+            gameManager.loadLevel(1);
             ModelData modelData = OBJFileLoader.loadOBJ("dragon");
             model = loader.loadToVAO(modelData.getVertices(),modelData.getIndices(),modelData.getNormals(),modelData.getTextureCoords());
             texture = new ModelTexture(loader.loadTexture("purple"));
@@ -111,11 +114,11 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
             lights.add(new Light(new Vector3f(-5,-5,0),new Vector3f(2,0,0), new Vector3f(1,0.01f,0.002f)));
 
 
-            TexturedModel barrelModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("sphere", loader),
+            TexturedModel playerModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("sphere", loader),
                     new ModelTexture(loader.loadTexture("white")));
-            barrelModel.getTexture().setNormalMap(loader.loadTexture("flat"));
-            barrelModel.getTexture().setShineDamper(10);
-            barrelModel.getTexture().setReflectivity(0.5f);
+            playerModel.getTexture().setNormalMap(loader.loadTexture("flat"));
+            playerModel.getTexture().setShineDamper(10);
+            playerModel.getTexture().setReflectivity(0.5f);
 
             TexturedModel crateModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("crate", loader),
                     new ModelTexture(loader.loadTexture("crate")));
@@ -130,10 +133,14 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
             boulderModel.getTexture().setReflectivity(0.5f);
 
 
-            Entity entity = new Entity(barrelModel, new Vector3f(0, 0, -15), 0f, 0f, 0f, 5f);
+            Entity entity = new Entity(playerModel, new Vector3f(0, 0, -15), 0f, 0f, 0f, 5f);
             Entity entity2 = new Entity(boulderModel, new Vector3f(0, 0, -15), 0, 0, 0, 1f);
             Entity entity3 = new Entity(crateModel, new Vector3f(0, 0, -15), 0, 0, 0, 0.04f);
+            normalEntities.addAll(gameManager.generateBoard());
 
+            player = new Player(gameManager.getPlayerLocation(),0,0,0,1,camera);
+
+            normalEntities.add(player);
 
             TexturedModel brickModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("brick", loader),
                     new ModelTexture(loader.loadTexture("brick_wall")));
@@ -143,7 +150,6 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
 
             Tile tile = new Tile(brickModel,new Vector3f(0, 0, -15), 0f, 0f, 0f, 3f);
 
-            normalEntities.addAll(gameManager.generateBoard());
             //normalEntities.add(tile);
             //normalEntities.add(entity3);
             //entities.add(new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0, 1, 1));
