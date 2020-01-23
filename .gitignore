@@ -4,6 +4,5 @@
 /build
 /captures
 .idea
-app/build
+app/build/
 AndroidGame.iml
-app/.gitignore
