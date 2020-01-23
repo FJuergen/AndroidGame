@@ -1,96 +1,96 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
-MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\cd2b4067ea72bbdbd2c650afdd3620e4\appcompat-v7-27.0.2\AndroidManifest.xml:17:1-22:12
-MERGED from [io.github.controlwear:virtualjoystick:1.10.1] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\a01e9f231a5f59f2bdc4062c6226af8c\virtualjoystick-1.10.1\AndroidManifest.xml:2:1-11:12
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\9d5fe626e6fa652dfb062e5cf1dd6f55\support-fragment-27.0.2\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\7f226a93afbdc9857ae082be86c6aee0\support-core-utils-27.0.2\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\35899fa4f7ca98ede9249341ad0f5c34\animated-vector-drawable-27.0.2\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\bced0514d3effefd6b1e18ba66479025\support-vector-drawable-27.0.2\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\50775d4d48094185a304c7f51044eefe\support-core-ui-27.0.2\AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:support-compat:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\8919d299bce43c1b720277d08d89eb62\support-compat-27.0.2\AndroidManifest.xml:17:1-22:12
-MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\5b6bd88c3593d3099731dca39b770a09\runtime-1.0.3\AndroidManifest.xml:17:1-24:12
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
+ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
+MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\cd2b4067ea72bbdbd2c650afdd3620e4\appcompat-v7-27.0.2\AndroidManifest.xml:17:1-22:12
+MERGED from [io.github.controlwear:virtualjoystick:1.10.1] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\a01e9f231a5f59f2bdc4062c6226af8c\virtualjoystick-1.10.1\AndroidManifest.xml:2:1-11:12
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\9d5fe626e6fa652dfb062e5cf1dd6f55\support-fragment-27.0.2\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\7f226a93afbdc9857ae082be86c6aee0\support-core-utils-27.0.2\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\35899fa4f7ca98ede9249341ad0f5c34\animated-vector-drawable-27.0.2\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\bced0514d3effefd6b1e18ba66479025\support-vector-drawable-27.0.2\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\50775d4d48094185a304c7f51044eefe\support-core-ui-27.0.2\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\8919d299bce43c1b720277d08d89eb62\support-compat-27.0.2\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\5b6bd88c3593d3099731dca39b770a09\runtime-1.0.3\AndroidManifest.xml:17:1-24:12
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
 	package
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:3:5-45
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:3:5-45
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
 	android:versionCode
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:1-21:12
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:2:11-69
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:2:11-69
 uses-feature#0x00020000
-ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:4:5-78
+ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:4:5-78
 	android:glEsVersion
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:4:19-51
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:4:19-51
 	android:required
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:4:52-75
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:4:52-75
 application
-ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:6:5-19:19
+ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:6:5-19:19
 	android:label
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:9:9-41
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:9:9-41
 	android:icon
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:8:9-43
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:8:9-43
 	android:allowBackup
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:7:9-35
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:7:9-35
 	android:theme
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:10:9-40
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:10:9-40
 activity#de.hs_kl.gatav.gles05colorcube.MainActivity
-ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:11:9-18:20
+ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:11:9-18:20
 	android:label
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:13:13-45
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:13:13-45
 	android:name
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:12:13-41
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:12:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:14:13-17:29
+ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:14:13-17:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:15:17-69
+ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:15:17-69
 	android:name
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:15:25-66
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:15:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:16:17-77
+ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:16:17-77
 	android:name
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml:16:27-74
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml:16:27-74
 uses-sdk
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\cd2b4067ea72bbdbd2c650afdd3620e4\appcompat-v7-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\cd2b4067ea72bbdbd2c650afdd3620e4\appcompat-v7-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [io.github.controlwear:virtualjoystick:1.10.1] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\a01e9f231a5f59f2bdc4062c6226af8c\virtualjoystick-1.10.1\AndroidManifest.xml:7:5-9:41
-MERGED from [io.github.controlwear:virtualjoystick:1.10.1] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\a01e9f231a5f59f2bdc4062c6226af8c\virtualjoystick-1.10.1\AndroidManifest.xml:7:5-9:41
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\9d5fe626e6fa652dfb062e5cf1dd6f55\support-fragment-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\9d5fe626e6fa652dfb062e5cf1dd6f55\support-fragment-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\7f226a93afbdc9857ae082be86c6aee0\support-core-utils-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\7f226a93afbdc9857ae082be86c6aee0\support-core-utils-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\35899fa4f7ca98ede9249341ad0f5c34\animated-vector-drawable-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\35899fa4f7ca98ede9249341ad0f5c34\animated-vector-drawable-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\bced0514d3effefd6b1e18ba66479025\support-vector-drawable-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\bced0514d3effefd6b1e18ba66479025\support-vector-drawable-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\50775d4d48094185a304c7f51044eefe\support-core-ui-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\50775d4d48094185a304c7f51044eefe\support-core-ui-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-compat:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\8919d299bce43c1b720277d08d89eb62\support-compat-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-compat:27.0.2] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\8919d299bce43c1b720277d08d89eb62\support-compat-27.0.2\AndroidManifest.xml:20:5-44
-MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\5b6bd88c3593d3099731dca39b770a09\runtime-1.0.3\AndroidManifest.xml:20:5-22:41
-MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\DEV\.gradle\caches\transforms-2\files-2.1\5b6bd88c3593d3099731dca39b770a09\runtime-1.0.3\AndroidManifest.xml:20:5-22:41
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\cd2b4067ea72bbdbd2c650afdd3620e4\appcompat-v7-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\cd2b4067ea72bbdbd2c650afdd3620e4\appcompat-v7-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [io.github.controlwear:virtualjoystick:1.10.1] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\a01e9f231a5f59f2bdc4062c6226af8c\virtualjoystick-1.10.1\AndroidManifest.xml:7:5-9:41
+MERGED from [io.github.controlwear:virtualjoystick:1.10.1] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\a01e9f231a5f59f2bdc4062c6226af8c\virtualjoystick-1.10.1\AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\9d5fe626e6fa652dfb062e5cf1dd6f55\support-fragment-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\9d5fe626e6fa652dfb062e5cf1dd6f55\support-fragment-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\7f226a93afbdc9857ae082be86c6aee0\support-core-utils-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\7f226a93afbdc9857ae082be86c6aee0\support-core-utils-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\35899fa4f7ca98ede9249341ad0f5c34\animated-vector-drawable-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\35899fa4f7ca98ede9249341ad0f5c34\animated-vector-drawable-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\bced0514d3effefd6b1e18ba66479025\support-vector-drawable-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\bced0514d3effefd6b1e18ba66479025\support-vector-drawable-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\50775d4d48094185a304c7f51044eefe\support-core-ui-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\50775d4d48094185a304c7f51044eefe\support-core-ui-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\8919d299bce43c1b720277d08d89eb62\support-compat-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\8919d299bce43c1b720277d08d89eb62\support-compat-27.0.2\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\5b6bd88c3593d3099731dca39b770a09\runtime-1.0.3\AndroidManifest.xml:20:5-22:41
+MERGED from [android.arch.lifecycle:runtime:1.0.3] C:\Users\dev\.gradle\caches\transforms-2\files-2.1\5b6bd88c3593d3099731dca39b770a09\runtime-1.0.3\AndroidManifest.xml:20:5-22:41
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\DEV\Documents\MI\GATAV\app\src\main\AndroidManifest.xml
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+		ADDED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
+		INJECTED from I:\dev\projects\GATAV\app\src\main\AndroidManifest.xml
