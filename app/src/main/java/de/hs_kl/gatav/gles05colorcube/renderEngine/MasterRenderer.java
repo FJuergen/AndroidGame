@@ -141,8 +141,6 @@ public class MasterRenderer {
         GLES30.glEnable(GLES30.GL_DEPTH_TEST);
         GLES30.glClearColor(0, 0, 0, 1);
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE5);
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, getShadowMaptexture());
     }
 
 

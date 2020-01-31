@@ -15,7 +15,7 @@ import de.hs_kl.gatav.gles05colorcube.TouchableGLSurfaceView;
 
 public class Player extends Entity{
 
-    float maxSpeed = 0.3f;
+    float maxSpeed = 0.2f;
     public boolean won = false;
     public boolean lost = false;
 
@@ -26,6 +26,8 @@ public class Player extends Entity{
     private float speed = 5.0f;
     private float size = 1.0f;
     private float dragFactor = 0.0f;
+
+    float collisionFinness = 30f;
 
     Camera camera;
 
@@ -61,39 +63,32 @@ public class Player extends Entity{
 
     //TODO implement collisions
     protected Vector3f processCollision(Vector3f direction, Map map) {
-        Vector3f currentPosition = new Vector3f(this.getPosition());
+        float xOffset = 1;
         Vector3f temp = new Vector3f(direction);
+
+        for(float i = 0; i < (Math.PI * 2); i+= ((Math.PI * 2) / collisionFinness)){
+            Vector3f currentPosition = new Vector3f(this.getPosition());
+            Vector2f hitPosition = map.toMapSpace(currentPosition.translate((float)(temp.x + xOffset + Math.sin(i)),(float)(temp.y + Math.cos(i)),0));
+            Map.MapObjectType intersectedObject = map.getObjectAt((int)hitPosition.x,(int)hitPosition.y);
+
+
+            if(intersectedObject == Map.MapObjectType.WALL){
+                if(Math.sin(i) > 0.5 || Math.sin(i) < -0.5)temp.x = - direction.x;
+                if(Math.cos(i) > 0.5 || Math.cos(i) < -0.5)temp.y = - direction.y;
+            }
+        }
+
+        Vector3f currentPosition = new Vector3f(this.getPosition());
         Vector2f hitPosition = map.toMapSpace(currentPosition.translate(temp.x,temp.y,0));
         Map.MapObjectType intersectedObject = map.getObjectAt((int)hitPosition.x,(int)hitPosition.y);
 
 
-        Vector2f hitPositionTop = map.toMapSpace(new Vector3f(currentPosition).translate(temp.x  + 2f,temp.y,0));
-        Map.MapObjectType intersectedObjectTop = map.getObjectAt((int)hitPositionTop.x,(int)hitPositionTop.y);
-        Vector2f hitPositionBottom = map.toMapSpace(new Vector3f(currentPosition).translate(temp.x -0f,temp.y,0));
-        Map.MapObjectType intersectedObjectBottom = map.getObjectAt((int)hitPositionBottom.x ,(int)hitPositionBottom.y);
-        Vector2f hitPositionRight = map.toMapSpace(new Vector3f(currentPosition).translate(temp.x,temp.y - 1f,0));
-        Map.MapObjectType intersectedObjectRight = map.getObjectAt((int)hitPositionRight.x,(int)hitPositionRight.y);
-        Vector2f hitPositionLeft = map.toMapSpace(new Vector3f(currentPosition).translate(temp.x,temp.y + 1f,0));
-        Map.MapObjectType intersectedObjectLeft = map.getObjectAt((int)hitPositionLeft.x,(int)hitPositionLeft.y);
 
-
-        if(intersectedObjectBottom == Map.MapObjectType.WALL || intersectedObjectTop == Map.MapObjectType.WALL){
-            temp.x = -direction.x;
-            //this.increasePosition(-direction.x,-direction.y,0);
-        }
-        if(intersectedObjectLeft == Map.MapObjectType.WALL || intersectedObjectRight == Map.MapObjectType.WALL){
-            temp.y = -direction.y;
-            //this.increasePosition(-direction.x,-direction.y,0);
-        }
         if(intersectedObject == Map.MapObjectType.DEATH){
             lost = true;
         }
         if(intersectedObject == Map.MapObjectType.GOAL){
             won = true;
-        }
-
-        if(intersectedObject == Map.MapObjectType.WALL){
-            System.out.println("WALL");
         }
 
         return temp;
