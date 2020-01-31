@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.fonts.Font;
 import android.opengl.GLSurfaceView;
 import android.provider.CalendarContract;
+import android.view.MotionEvent;
 
 import org.w3c.dom.Text;
 
@@ -64,6 +65,15 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
         setRenderer(ourRenderer);
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent e){
+        if(stopped) {
+            ourRenderer.restart();
+        }
+        return true;
+    }
+
 
 
     // the implementation of the renderer interface
@@ -127,23 +137,25 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
                 long difference =  Calendar.getInstance().getTime().getTime() - startTime.getTime();
                 stopped = true;
                 FontType font = new FontType(loader.loadTexture("arial"), "fonts/arial.fnt");
-                winText = new GUIText("Gut gemacht! Du hast: " + ((difference / 100  % 600 ) / 10f) + " Sekunden gebraucht", 1, font, new Vector2f(0.3f,0.3f), .4f, true);
+                winText = new GUIText("Gut gemacht! Du hast: " + ((difference / 100  % 600 ) / 10f) + " Sekunden gebraucht                               Tippe zum Neustarten", 1, font, new Vector2f(0.3f,0.3f), .4f, true);
                 winText.setColour(1,1,1);
             }
             if(player.lost){
                 stopped = true;
                 FontType font = new FontType(loader.loadTexture("arial"), "fonts/arial.fnt");
-                lossText = new GUIText("Schade das war wohl nichts. ", 1, font, new Vector2f(0.3f,0.5f), .4f, true);
+                lossText = new GUIText("Schade das war wohl nichts.   Tippe zum Neustarten", 1, font, new Vector2f(0.3f,0.5f), .4f, true);
                 lossText.setColour(1,1,1);
 
             }
         }
 
-        public void restart(){
-            TextMaster.removeText(winText);
-            TextMaster.removeText(lossText);
-            startTime = Calendar.getInstance().getTime();
 
+        public void restart(){
+            if(player.won)TextMaster.removeText(winText);
+            if(player.lost)TextMaster.removeText(lossText);
+            startTime = Calendar.getInstance().getTime();
+            player.reset();
+            stopped = false;
         }
 
         // creation of viewport

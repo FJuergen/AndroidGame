@@ -22,6 +22,7 @@ public class Camera {
         Vector3f.add(direction,position,position);
     }
 
+    public void setPosition(Vector3f position){this.position = position;}
 
     public Vector3f getPosition() {
         return position;

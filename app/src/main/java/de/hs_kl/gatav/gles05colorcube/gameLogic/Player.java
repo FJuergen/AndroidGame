@@ -18,6 +18,7 @@ public class Player extends Entity{
     float maxSpeed = 0.2f;
     public boolean won = false;
     public boolean lost = false;
+    Vector3f originalLocation;
 
     private Vector3f velocity = new Vector3f(0.0f,0.0f,0.0f);
     private Vector3f counterVelocity = new Vector3f(1.0f,1.0f,1.0f);
@@ -35,8 +36,16 @@ public class Player extends Entity{
         super(new TexturedModel(NormalMappedObjLoader.loadOBJ("sphere", TouchableGLSurfaceView.loader),new ModelTexture(TouchableGLSurfaceView.loader.loadTexture("white"))),position,rx,ry,rz,1);
         this.setScale(size);
         this.camera = camera;
-        camera.move(new Vector3f(this.getPosition().x,this.getPosition().y,0.0f));
+        this.camera.move(new Vector3f(this.getPosition().x,this.getPosition().y,0.0f));
+        originalLocation = new Vector3f(position);
         lastCollisionTime = System.currentTimeMillis();
+    }
+
+    public void reset(){
+        this.setPosition(new Vector3f(originalLocation));
+        camera.setPosition(new Vector3f(this.getPosition().x,this.getPosition().y,0.0f));
+        won = false;
+        lost = false;
     }
 
     public void move(float deltaTime, Map map) {
