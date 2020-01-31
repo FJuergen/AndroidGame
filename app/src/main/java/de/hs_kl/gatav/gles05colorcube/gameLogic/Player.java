@@ -63,12 +63,12 @@ public class Player extends Entity{
 
     //TODO implement collisions
     protected Vector3f processCollision(Vector3f direction, Map map) {
-        float xOffset = 1;
+        float offset = 1;
         Vector3f temp = new Vector3f(direction);
 
         for(float i = 0; i < (Math.PI * 2); i+= ((Math.PI * 2) / collisionFinness)){
             Vector3f currentPosition = new Vector3f(this.getPosition());
-            Vector2f hitPosition = map.toMapSpace(currentPosition.translate((float)(temp.x + xOffset + Math.sin(i)),(float)(temp.y + Math.cos(i)),0));
+            Vector2f hitPosition = map.toMapSpace(currentPosition.translate((float)(temp.x + offset + Math.sin(i)),(float)(temp.y + offset + Math.cos(i)),0));
             Map.MapObjectType intersectedObject = map.getObjectAt((int)hitPosition.x,(int)hitPosition.y);
 
 

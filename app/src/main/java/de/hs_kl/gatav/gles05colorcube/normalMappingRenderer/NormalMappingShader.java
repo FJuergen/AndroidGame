@@ -13,7 +13,7 @@ import de.hs_kl.gatav.gles05colorcube.vector.Vector4f;
 
 public class NormalMappingShader extends ShaderProgram {
 	
-	private static final int MAX_LIGHTS = 4;
+	private static final int MAX_LIGHTS = 10;
 	
 	private static final String VERTEX_FILE = "shaders/normalMapVShader.glsl";
 	private static final String FRAGMENT_FILE = "shaders/normalMapFShader.glsl";

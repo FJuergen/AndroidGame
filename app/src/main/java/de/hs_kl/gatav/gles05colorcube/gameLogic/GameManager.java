@@ -7,6 +7,7 @@ import java.util.Random;
 import android.content.res.AssetManager;
 
 import de.hs_kl.gatav.gles05colorcube.entities.Entity;
+import de.hs_kl.gatav.gles05colorcube.entities.Light;
 import de.hs_kl.gatav.gles05colorcube.models.TexturedModel;
 import de.hs_kl.gatav.gles05colorcube.normalMappingObjConverter.NormalMappedObjLoader;
 import de.hs_kl.gatav.gles05colorcube.textures.ModelTexture;
@@ -85,12 +86,9 @@ public class GameManager {
         boolean foundPlayerLocation = false;
         for(int i = 0; i< currentMap.getWidth(); i++){
             for(int j = 0; j < currentMap.getHeight(); j++){
-                System.out.println("i:" + i + " j:" + j);
-                System.out.println( new Vector3f((i + offsetX)* SCALE *  2 , (j + offsetY) * SCALE * 2, -20f ).toString());
-                System.out.println( currentMap.toMapSpace( new Vector3f((i + offsetX)* SCALE *  2 , (j + offsetY) * SCALE * 2, -20f )).toString());
                 switch(currentMap.getObjectAt(i,j)){
                     case EMPTY:
-                        if(!foundPlayerLocation && random.nextFloat() < 0.05){
+                        if(!foundPlayerLocation && random.nextFloat() < 0.01 && i > 1){
                             playerLocation = new Vector3f((i + offsetX)* SCALE *  2 , (j + offsetY) * SCALE * 2, -20f + SCALE * 2 );
                             foundPlayerLocation = true;
                         }
@@ -100,10 +98,14 @@ public class GameManager {
                         retList.add(new Tile(brickModel2, new Vector3f((i + offsetX)* SCALE * 2, (j + offsetY) * SCALE* 2, -20f + SCALE * 2), 0,0,0,SCALE));
                         break;
                     case GOAL:
-                        retList.add(new Tile(goal, new Vector3f((i + offsetX)* SCALE * 2, (j + offsetY) * SCALE* 2, -20f), 0,0,0,SCALE));
+                        Vector3f winPosition = new Vector3f((i + offsetX)* SCALE * 2, (j + offsetY) * SCALE* 2, -20f);
+                        Light winLight = new Light(Vector3f.add(winPosition,new Vector3f(0,1,SCALE * 2),null),new Vector3f(1,0,1),new Vector3f(1,0.05f,0.005f));
+                        retList.add(new Tile(goal, winPosition, 0,0,0,SCALE,winLight));
                         break;
                     case DEATH:
-                        retList.add(new Tile(death, new Vector3f((i + offsetX)* SCALE * 2, (j + offsetY) * SCALE*  2, -20f), 0,0,0,SCALE));
+                        Vector3f lossPosition = new Vector3f((i + offsetX)* SCALE * 2, (j + offsetY) * SCALE*  2, -20f);
+                        Light lossLight = new Light(Vector3f.add(lossPosition,new Vector3f(0,1,SCALE * 2),null),new Vector3f(1,1,1),new Vector3f(1,0.05f,0.005f));
+                        retList.add(new Tile(death, lossPosition, 0,0,0,SCALE,lossLight));
                         break;
                 }
             }

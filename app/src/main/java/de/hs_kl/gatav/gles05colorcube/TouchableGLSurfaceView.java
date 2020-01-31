@@ -127,7 +127,7 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
                 long difference =  Calendar.getInstance().getTime().getTime() - startTime.getTime();
                 stopped = true;
                 FontType font = new FontType(loader.loadTexture("arial"), "fonts/arial.fnt");
-                winText = new GUIText("Gut gemacht! Du hast:" + ((difference / 100  % 600 ) / 10f) + " Sekunden gebraucht", 1, font, new Vector2f(0.3f,0.3f), .4f, true);
+                winText = new GUIText("Gut gemacht! Du hast: " + ((difference / 100  % 600 ) / 10f) + " Sekunden gebraucht", 1, font, new Vector2f(0.3f,0.3f), .4f, true);
                 winText.setColour(1,1,1);
             }
             if(player.lost){
@@ -156,57 +156,25 @@ public class TouchableGLSurfaceView extends GLSurfaceView {
             loader = new Loader();
             TextMaster.init(loader);
             gameManager.loadLevel(1);
-            ModelData modelData = OBJFileLoader.loadOBJ("dragon");
-            model = loader.loadToVAO(modelData.getVertices(),modelData.getIndices(),modelData.getNormals(),modelData.getTextureCoords());
-            texture = new ModelTexture(loader.loadTexture("purple"));
-            texturedModel = new TexturedModel(model,texture);
-            texture.setReflectivity(0.75f);
-            texture.setShineDamper(10);
             lights.add(new Light(new Vector3f(0,50,50),new Vector3f(.5f,.5f,.5f)));
-            lights.add(new Light(new Vector3f(0,5,0),new Vector3f(0,2,0), new Vector3f(1,0.01f,0.002f)));
-            lights.add(new Light(new Vector3f(0,-5,0),new Vector3f(0,0,2), new Vector3f(1,0.01f,0.002f)));
-            lights.add(new Light(new Vector3f(-5,-5,0),new Vector3f(2,0,0), new Vector3f(1,0.01f,0.002f)));
 
 
             TexturedModel playerModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("sphere", loader),
                     new ModelTexture(loader.loadTexture("white")));
             playerModel.getTexture().setNormalMap(loader.loadTexture("flat"));
             playerModel.getTexture().setShineDamper(10);
-            playerModel.getTexture().setReflectivity(0.5f);
+            playerModel.getTexture().setReflectivity(0.3f);
 
-            TexturedModel crateModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("crate", loader),
-                    new ModelTexture(loader.loadTexture("crate")));
-            crateModel.getTexture().setNormalMap(loader.loadTexture("crateNormal"));
-            crateModel.getTexture().setShineDamper(10);
-            crateModel.getTexture().setReflectivity(0.5f);
-
-            TexturedModel boulderModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("boulder", loader),
-                    new ModelTexture(loader.loadTexture("boulder")));
-            boulderModel.getTexture().setNormalMap(loader.loadTexture("boulderNormal"));
-            boulderModel.getTexture().setShineDamper(10);
-            boulderModel.getTexture().setReflectivity(0.5f);
-
-
-            Entity entity = new Entity(playerModel, new Vector3f(0, 0, -15), 0f, 0f, 0f, 5f);
-            Entity entity2 = new Entity(boulderModel, new Vector3f(0, 0, -15), 0, 0, 0, 1f);
-            Entity entity3 = new Entity(crateModel, new Vector3f(0, 0, -15), 0, 0, 0, 0.04f);
             normalEntities.addAll(gameManager.generateBoard());
+            for(Entity e : normalEntities){
+                if(e.getClass() == Tile.class && ((Tile)e).light != null){
+                    lights.add(((Tile)e).light);
+                }
+            }
 
             player = new Player(gameManager.getPlayerLocation(),0,0,0,1,camera);
 
             normalEntities.add(player);
-
-            TexturedModel brickModel = new TexturedModel(NormalMappedObjLoader.loadOBJ("brick", loader),
-                    new ModelTexture(loader.loadTexture("brick_wall")));
-            brickModel.getTexture().setNormalMap(loader.loadTexture("brick_wall_normal"));
-            brickModel.getTexture().setShineDamper(10);
-            brickModel.getTexture().setReflectivity(0.5f);
-
-            Tile tile = new Tile(brickModel,new Vector3f(0, 0, -15), 0f, 0f, 0f, 3f);
-
-            //normalEntities.add(tile);
-            //normalEntities.add(entity3);
-            //entities.add(new Entity(texturedModel, new Vector3f(0,0,-15),0,0,0, 1, 1));
 
             shader = new StaticShader();
         }
